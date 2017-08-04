@@ -1,2 +1,2 @@
 # collection
-Laravel's collection implenetation in JS.
+Laravel's collection implenetation.
