@@ -1,192 +1,528 @@
-class Collection {
+export default class Collection
+{
     /**
      * Create a new Collection instance.
      */
-    constructor(items = []) {
-        this.fill(items);
+    constructor(items = [])
+    {
+        this.items = items;
     }
-
 
     /**
      * Get all of the items in the collection.
      */
-    all() {
-        return this.items.map(item => { return item });
+    all()
+    {
+        return this.items;
     }
-
 
     /**
-     * Determine if an item exists in the collection.
+     * Get all of the items in the collection.
      */
-    contains(item) {
-        return this.items.indexOf(item) === -1 ? false : true;
+    avg(key = null)
+    {
+        return this.sum(key) / this.count();
     }
-
 
     /**
-     * Count the number of items in the collection.
+     * Split the collection to groups by the given size.
      */
-    count() {
-        return this.items.length;
-    }
+    chunk(size)
+    {
+        let sets = [], chunks, i = 0, items = this.items;
+        chunks = this.count() / size;
 
+        while(i < chunks){
+            sets[i] = items.splice(0, size);
+            i++;
+        }
+
+        return new this.constructor(sets);
+    }
 
     /**
      * Clear the collection.
      */
-    clear() {
-        return this.fill([]);
+    clear()
+    {
+        this.items = [];
+
+        return this;
     }
 
+    /**
+     * Clone the collection.
+     */
+    clone()
+    {
+        return new this.constructor(this.items);
+    }
+
+    /**
+     * Determines if the key / value pair exists.
+     */
+    contains(key, value = null)
+    {
+        if (value !== null && this.item.hasOwnProperty(key)) {
+            return JSON.stringify(this.items[key]) === JSON.stringify(value);
+        }
+
+        for (let i in this.items) {
+            if (JSON.stringify(key) === JSON.stringify(this.items[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Count the number of items in the collection.
+     */
+    count()
+    {
+        return this.items.length;
+    }
+
+    /**
+     * Search the difference between the given items and the collection items.
+     */
+    diff(items)
+    {
+        return new this.constructor(this.items.filter((item, key) => items.indexOf(item) < 0));
+    }
+
+    /**
+     * Iterate over the collection items.
+     */
+    each(callback)
+    {
+        for (let i in this.items) {
+            if (! callback(this.items[key], key)) {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Determine if every item pass a given truth test.
+     */
+    every(callback)
+    {
+        return this.items.every(callback);
+    }
+
+    /**
+     * Remove the given keys from the items.
+     */
+    except(keys)
+    {
+        keys = Array.isArray(keys) ? keys : [keys];
+
+        return this.clone().transform(item => keys.map(key => {
+            delete item[key];
+            return item;
+        }));
+    }
 
     /**
      * Fill the collection.
      */
-    fill(items) {
+    fill(items)
+    {
         this.items = items;
 
         return this;
     }
 
-    
     /**
-     * Filter the items by the given condition.
+     * Filter trough the collection items.
      */
-    filter(callback) {
-        return new Collection(this.items.filter(item => callback(item)));
-    }
+    filter(callback = null)
+    {
+        if (! callback) {
+            return new this.constructor(this.items.filter(item => item));
+        }
 
+        return new this.constructor(this.items.filter((item, key) => callback(item, key)));
+    }
 
     /**
      * Get the first item from the collection.
      */
-    first() {
-        return this.get(0);
+    first()
+    {
+        return this.items[0] || null;
     }
-
 
     /**
      * Remove items from the collection by keys.
      */
-    forget(keys) {
-        keys = typeof keys === 'object' ? keys : [keys];
+    forget(key)
+    {
+        key = Array.isArray(key) ? key : [key];
 
-        let items = this.items;
-        
-        keys.forEach(key => { items.splice(key, 1) });
+        key.forEach(key => this.items.splice(key, 1));
 
-        return this.fill(items);
+        return this;
     }
-
 
     /**
      * Get an item from the collection by key.
      */
-    get(key, fallback = null) {
-        return this.items[key] || fallback;
+    get(key, value = null)
+    {
+        if (typeof value === 'function') {
+            value = value();
+        }
+
+        return this._extract(key, this.items, value)
     }
 
-
     /**
-     * Determine if the collection has the given item.
+     * Determine if the collection has item by the given key.
      */
-    has(key) {
+    has(key)
+    {
         return this.items.hasOwnProperty(key);
     }
 
-
     /**
-     * Determine if the collection is empty or not.
+     * Implode the collection by the given glue.
      */
-    isEmpty() {
-        return this.count() <= 0;
+    implode(key, glue = null)
+    {
+        if (! glue) {
+            return this.items.join(key)
+        }
+
+        return this.items.map(item => this._extract(key, item)).join(glue);
     }
 
+    /**
+     * Determine if the collection is empty.
+     */
+    isEmpty()
+    {
+        return this.count() < 1;
+    }
 
     /**
-     * Determine if the collection is empty or not.
+     * Determine if the collection is not empty.
      */
-    isNotEmpty() {
+    isNotEmpty()
+    {
         return ! this.isEmpty();
     }
 
-
     /**
-     * Get the last item from the collection.
+     * Get the keys of the collection.
      */
-    last() {
-        return this.get(this.count() - 1);
+    keys()
+    {
+        return Object.keys(this.items);
     }
 
+    /**
+     * Get the last element in the collection.
+     */
+    last()
+    {
+        return this.items[this.count() - 1];
+    }
+
+    /**
+     * Map trought the items.
+     */
+    map(callback)
+    {
+        return new this.constructor(this.items.map((item, index) => callback(item, index)));
+    }
+
+    /**
+     * Get the max value by the given key.
+     */
+    max(key = null)
+    {
+        if (! key) {
+            return Math.max(...this.items);
+        }
+
+        return this.pluck(key).max();
+    }
+
+    /**
+     * Merge the items to the collection.
+     */
+    merge(items)
+    {
+        return new this.constructor(this.items.concat(items));
+    }
+
+    /**
+     * Get the min value by the given key.
+     */
+    min(key = null)
+    {
+        if (! key) {
+            return Math.min(...this.items);
+        }
+
+        return this.pluck(key).min();
+    }
+
+    /**
+     * Get the nt-h element in the collection.
+     */
+    nth(n)
+    {
+        return this.items[n--];
+    }
+
+    /**
+     * Leave only the given keys in the collection items.
+     */
+    only(keys)
+    {
+        keys = Array.isArray(keys) ? keys : [keys];
+
+        return this.clone().transform(item => keys.map(key => {
+            let reduced = {};
+
+            if (item.hasOwnProperty(key)) {
+                reduced[key] = item[key];
+            }
+
+            return reduced;
+        }));
+    }
+
+    /**
+     * Pluck the values by the given keys.
+     */
+    pluck(key)
+    {
+        return new this.constructor(
+            this.items.map(item => this._extract(key, item))
+                .filter(item => item)
+        );
+    }
 
     /**
      * Get and remove the last item from the collection.
      */
-    pop() {
+    pop()
+    {
         return this.items.pop();
     }
-
 
     /**
      * Push an item onto the beginning of the collection.
      */
-    prepend(item) {
+    prepend(item)
+    {
         this.items.unshift(item);
 
         return this;
     }
 
+    /**
+     * Get and remove an item from the collection.
+     */
+    pull(key)
+    {
+        return this.items.splice(key, 1);
+    }
 
     /**
      * Push an item onto the end of the collection.
      */
-    push(item) {
+    push(item)
+    {
         this.items.push(item);
 
         return this;
     }
 
-
     /**
-     * Get and remove an item from the collection.
+     * Get a random item from the collection.
      */
-    pull(key) {
-        return this.items.splice(key, 1);
+    random()
+    {
+        return this.items[Math.floor(Math.random() * this.count())];
     }
 
+    /**
+     * Reduce the values to a single value.
+     */
+    reduce(callback, initial = null)
+    {
+        return this.items.reduce((carry, item) => callback(carry, item), initial);
+    }
+
+    /**
+     * Reject the items what does not pass the truth test.
+     */
+    reject(callback)
+    {
+        if (! callback) {
+            return new this.constructor(this.items.filter(item => item));
+        }
+
+        return new this.constructor(this.items.filter((item, key) => ! callback(item, key)));
+    }
 
     /**
      * Reverse items order.
      */
-    reverse() {
+    reverse()
+    {
         this.items.reverse();
 
         return this;
     }
 
-
     /**
      * Search the collection for a given value and return the corresponding key if successful.
      */
-    search(item) {
+    search(item)
+    {
         let key;
-        
-        return (key = this.items.indexOf(item)) === -1 ? false : key;
-    }
 
+        return (key = this.items.indexOf(item)) < 0 ? false : key;
+    }
 
     /**
      * Get and remove the first item from the collection.
      */
-    shift() {
+    shift()
+    {
         return this.items.shift();
     }
 
+    shuffle() {}
+
+    /**
+     * Slice the collection by the given index and size.
+     */
+    slice(index, size = null)
+    {
+        return new this.constructor(this.items.slice(index, size));
+    }
+
+    /**
+     * Sort the collection.
+     */
+    sort(callback = null)
+    {
+        this.items.sort((a, b) => callback ? callback(a, b) : a - b);
+
+        return this;
+    }
+
+    /**
+     * Sort the collection in desc order.
+     */
+    sortDesc(callback = null)
+    {
+        return this.sort(callback).reverse();
+    }
+
+    /**
+     * Sort the collection by the given key.
+     */
+    sortBy(key)
+    {
+        return this.sort((a, b) => (this._extract(key, a, 0) - this._extract(key, b, 0)));
+    }
+
+    /**
+     * Sort the collection by the given key in desc order.
+     */
+    sortByDesc(key)
+    {
+        return this.sortBy(key).reverse();
+    }
+
+    /**
+     * Splice the collection by the index and the count and add exrta items to it.
+     */
+    splice(index, count = 0, ...items)
+    {
+        return new this.constructor(this.items.splice(index, count, items));
+    }
+
+    /**
+     * Split the collection to the given amount of groups.
+     */
+    split(groups)
+    {
+        let chunks = [], items = this.items;
+
+        while(items.length) {
+            let chunkSize = Math.ceil(items.length / groups--);
+            let chunk = items.slice(0, chunkSize);
+
+            chunks.push(chunk);
+            items = items.slice(chunkSize);
+        }
+
+        return new this.constructor(chunks);
+    }
+
+    /**
+     * Sum the values of the items or the callback.
+     */
+    sum(key = null)
+    {
+        if (typeof key === 'function') {
+            return this.reduce((carry, item) => key(carry, item));
+        }
+
+        return this.reduce((carry, item) => (key ? this._extract(key, item, 0) : item) + carry);
+    }
+
+    /**
+     * Take the given amout of items from the collection.
+     */
+    take(limit)
+    {
+        if (limit < 0) {
+            return new this.constructor(this.items.slice(limit));
+        }
+
+        return new this.constructor(this.items.slice(0, limit));
+    }
+
+    /**
+     * Tap the collection.
+     */
+    tap(callback)
+    {
+        callback(this.clone());
+
+        return this;
+    }
+
+    /**
+     * Static way to create collections.
+     */
+    static times(number, callback)
+    {
+        let items = [];
+
+        for (let i = 1; i <= number; i++) {
+            items.push(callback(i));
+        }
+
+        return new Collection(items);
+    }
 
     /**
      * Toggle an item in the collection.
      */
-    toggle(item) {
+    toggle(item)
+    {
         if (this.contains(item)) {
             this.forget(this.search(item));
         } else {
@@ -196,16 +532,53 @@ class Collection {
         return this;
     }
 
+    /**
+     * Convert the collection to JSON.
+     */
+    toJson()
+    {
+        return JSON.stringify(this.items);
+    }
 
     /**
-     * Return a new collection with the items.
+     * Transforms the collection by the given callback.
      */
-    where(key, value) {
-        return new Collection(this.items).filter(item => {
-            return item.hasOwnProperty(key) && item[key] == value;
-        });
+    transform(callback)
+    {
+        this.items = this.items.map((item, key) => callback(item, key));
+
+        return this;
+    }
+
+    /**
+     * Return a new collection with the items what pass the condition.
+     */
+    where(key, value)
+    {
+        return this.filter(item => this._extract(key, item) == value);
+    }
+
+    /**
+     * Return a new collection with the items what pass the condition.
+     */
+    whereIn(key, values)
+    {
+        return this.filter(item => values.includes(this._extract(key, item)));
+    }
+
+    /**
+     * Return a new collection with the items what do not pass the condition.
+     */
+    whereNotIn(key, values)
+    {
+        return this.filter(item => ! values.includes(this._extract(key, item)));
+    }
+
+    /**
+     * The extract helper.
+     */
+    _extract(key, item, value = null)
+    {
+        return key.split('.').reduce((t, i) => t[i] || value, item)
     }
 }
-
-
-export default Collection;
