@@ -63,14 +63,11 @@ export default class Collection
      */
     contains(key, value = null)
     {
-        if (value !== null && this.item.hasOwnProperty(key)) {
+        if (value && this.items.hasOwnProperty(key)) {
             return JSON.stringify(this.items[key]) === JSON.stringify(value);
         }
-
         for (let i in this.items) {
-            if (JSON.stringify(key) === JSON.stringify(this.items[i])) {
-                return true;
-            }
+            if (JSON.stringify(key) === JSON.stringify(this.items[i])) return true;
         }
 
         return false;
@@ -98,7 +95,7 @@ export default class Collection
     each(callback)
     {
         for (let i in this.items) {
-            if (! callback(this.items[key], key)) {
+            if (callback(this.items[i], i) === false) {
                 return false;
             }
         }
@@ -119,10 +116,13 @@ export default class Collection
     {
         keys = Array.isArray(keys) ? keys : [keys];
 
-        return this.clone().transform(item => keys.map(key => {
-            delete item[key];
+        return this.map(item => {
+            keys.forEach(key => {
+                if (item.hasOwnProperty(key)) delete item[key];
+            });
+
             return item;
-        }));
+        });
     }
 
     /**
@@ -140,9 +140,7 @@ export default class Collection
      */
     filter(callback = null)
     {
-        if (! callback) {
-            return new this.constructor(this.items.filter(item => item));
-        }
+        if (! callback) return new this.constructor(this.items.filter(item => item));
 
         return new this.constructor(this.items.filter((item, key) => callback(item, key)));
     }
@@ -172,9 +170,7 @@ export default class Collection
      */
     get(key, value = null)
     {
-        if (typeof value === 'function') {
-            value = value();
-        }
+        if (typeof value === 'function') value = value();
 
         return this._extract(key, this.items, value)
     }
@@ -192,9 +188,7 @@ export default class Collection
      */
     implode(key, glue = null)
     {
-        if (! glue) {
-            return this.items.join(key)
-        }
+        if (! glue) return this.items.join(key);
 
         return this.items.map(item => this._extract(key, item)).join(glue);
     }
@@ -244,9 +238,7 @@ export default class Collection
      */
     max(key = null)
     {
-        if (! key) {
-            return Math.max(...this.items);
-        }
+        if (! key) return Math.max(...this.items);
 
         return this.pluck(key).max();
     }
@@ -264,9 +256,7 @@ export default class Collection
      */
     min(key = null)
     {
-        if (! key) {
-            return Math.min(...this.items);
-        }
+        if (! key) return Math.min(...this.items);
 
         return this.pluck(key).min();
     }
@@ -286,15 +276,13 @@ export default class Collection
     {
         keys = Array.isArray(keys) ? keys : [keys];
 
-        return this.clone().transform(item => keys.map(key => {
-            let reduced = {};
+        return this.map(item => {
+            Object.keys(item).forEach(key => {
+                if (! keys.includes(key)) delete item[key];
+            });
 
-            if (item.hasOwnProperty(key)) {
-                reduced[key] = item[key];
-            }
-
-            return reduced;
-        }));
+            return item;
+        });
     }
 
     /**
@@ -365,9 +353,7 @@ export default class Collection
      */
     reject(callback)
     {
-        if (! callback) {
-            return new this.constructor(this.items.filter(item => item));
-        }
+        if (! callback) return new this.constructor(this.items.filter(item => item));
 
         return new this.constructor(this.items.filter((item, key) => ! callback(item, key)));
     }
@@ -488,9 +474,7 @@ export default class Collection
      */
     sum(key = null)
     {
-        if (typeof key === 'function') {
-            return this.reduce((carry, item) => key(carry, item));
-        }
+        if (typeof key === 'function') return this.reduce((carry, item) => key(carry, item));
 
         return this.reduce((carry, item) => (key ? this._extract(key, item, 0) : item) + carry);
     }
@@ -500,9 +484,7 @@ export default class Collection
      */
     take(limit)
     {
-        if (limit < 0) {
-            return new this.constructor(this.items.slice(limit));
-        }
+        if (limit < 0) return new this.constructor(this.items.slice(limit));
 
         return new this.constructor(this.items.slice(0, limit));
     }
@@ -566,10 +548,16 @@ export default class Collection
     /**
      * Filter only unique items in the collection.
      */
-    unique()
+    unique(key = null)
     {
         let items = this.items.reduce((items, item) => {
-            if (items.indexOf(item) < 0) items.push(item);
+            if (items.indexOf(item) < 0) {
+                if (key) item[key] = 1;
+                items.push(item);
+            } else if(key) {
+                items[items.indexOf(item)][key]++;
+            }
+
             return items;
         }, []);
 
