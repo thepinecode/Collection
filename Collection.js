@@ -400,7 +400,20 @@ export default class Collection
         return this.items.shift();
     }
 
-    shuffle() {}
+    /**
+     * Shuffle the collection in a random order.
+     */
+    shuffle()
+    {
+        let items = this.items;
+
+        for (let i = items.length; i; i--) {
+            let j = Math.floor(Math.random() * i);
+            [items[i - 1], items[j]] = [items[j], items[i - 1]];
+        }
+
+        return new this.constructor(items);
+    }
 
     /**
      * Slice the collection by the given index and size.
@@ -548,6 +561,19 @@ export default class Collection
         this.items = this.items.map((item, key) => callback(item, key));
 
         return this;
+    }
+
+    /**
+     * Filter only unique items in the collection.
+     */
+    unique()
+    {
+        let items = this.items.reduce((items, item) => {
+            if (items.indexOf(item) < 0) items.push(item);
+            return items;
+        }, []);
+
+        return new this.constructor(items);
     }
 
     /**
