@@ -1,4 +1,4 @@
-export default class Collection
+class Collection
 {
     /**
      * Create a new Collection instance.
@@ -596,3 +596,7 @@ export default class Collection
         return key.split('.').reduce((t, i) => t[i] || value, item)
     }
 }
+
+const collect = (items = []) => new Collection(items);
+
+export { Collection as default, collect };
