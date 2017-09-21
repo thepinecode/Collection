@@ -13,26 +13,41 @@ Also there are some minor changes compared to Laravel's collection.
 The ``all`` method lists the items in the collection.
 
 ```js
-collect([1,2,3,4]).all()
-// [1,2,3,4]
+collect([1,2,3,4]).all() // [1,2,3,4]
 ```
 
 #### ``avg()``
 The ``avg`` method computes the average of the items, or the values of the given key.
 
 ```js
-collect([1,2,3,4]).avg()
-// 2.5
+collect([1,2,3,4]).avg() // 2.5
 
-collect([{price: 1}, {price: 2}, {price: 3}]).avg('price')
-// 2
+collect([{price: 1}, {price: 2}, {price: 3}]).avg('price') // 2
 ```
 
 #### ``chunk()``
+The ``chunk`` method breaks the collection to groups of the given size.
+> This method does not modifies the original collection!
+
+```js
+collect([1,2,3,4,5,6,7,8,9,10]).chunk(3)
+
+// [[1,2,3], [4,5,6], [7,8,9], [10]]
+```
 
 #### ``clear()``
+The ``clear`` method removes all the items from the collection.
+> This method modifies the original collection!
+> Also, this is not implemented in Laravel!
+
+```js
+collect([1,2,3,4,5,6]).clear() // []
+```
 
 #### ``clone()``
+The ``clone`` method clones the collection instance.
+> It's like moment.js' clone method.
+> This is not implemented in Laravel!
 
 #### ``contains()``
 
