@@ -373,9 +373,13 @@ class Collection
      */
     search(item)
     {
-        let key;
+        for (let i in this.items) {
+            if (JSON.stringify(this.items[i]) === JSON.stringify(item)) {
+                return i;
+            }
+        }
 
-        return (key = this.items.indexOf(item)) < 0 ? false : key;
+        return false;
     }
 
     /**
@@ -550,18 +554,28 @@ class Collection
      */
     unique(key = null)
     {
+        let counts = [];
+
         let items = this.items.reduce((items, item) => {
-            if (items.indexOf(item) < 0) {
-                if (key) item[key] = 1;
+            if (! items.contains(item)) {
                 items.push(item);
+                if (key) {
+                    let counter = {};
+                    counter[key] = 1;
+                    counts.push(counter);
+                }
             } else if(key) {
-                items[items.indexOf(item)][key]++;
+                counts[items.search(item)][key]++;
             }
 
             return items;
-        }, []);
+        }, new this.constructor);
+      
+        if (key) {
+           items.transform((item, index) => Object.assign({}, item, counts[index]))
+        }
 
-        return new this.constructor(items);
+        return items;
     }
 
     /**
@@ -569,7 +583,7 @@ class Collection
      */
     where(key, value)
     {
-        return this.filter(item => this._extract(key, item) == value);
+        return this.filter(item => this._extract(key, item) == value);
     }
 
     /**
@@ -577,7 +591,7 @@ class Collection
      */
     whereIn(key, values)
     {
-        return this.filter(item => values.includes(this._extract(key, item)));
+        return this.filter(item => values.includes(this._extract(key, item)));
     }
 
     /**
@@ -585,7 +599,7 @@ class Collection
      */
     whereNotIn(key, values)
     {
-        return this.filter(item => ! values.includes(this._extract(key, item)));
+        return this.filter(item => ! values.includes(this._extract(key, item)));
     }
 
     /**
