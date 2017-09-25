@@ -38,6 +38,7 @@ collect([1,2,3,4,5,6,7,8,9,10]).chunk(3);
 #### ``clear()``
 The ``clear`` method removes all the items from the collection.
 > This method modifies the original collection!
+>
 > Also, this is not implemented in Laravel!
 
 ```js
@@ -47,6 +48,7 @@ collect([1,2,3,4,5,6]).clear() // []
 #### ``clone()``
 The ``clone`` method clones the collection instance.
 > It's like moment.js' clone method.
+>
 > This is not implemented in Laravel!
 
 ```js
@@ -107,13 +109,14 @@ collect([1,2,3,4,5,6,7,8]).every((item, key) => {
 #### ``except()``
 The ``except`` method returns all the items without the given keys.
 > This method works only with object '{}' items.
+>
 > This method does not modify the original collection.
 
 ```js
-let except = collection([
+let except = collect([
     {name: 'Adam', role: 'Front-end dev', site: 'pineco.de'}, 
     {name: 'Gergo', role: 'Back-end dev', site: 'pineco.de'}
-]).filter(['role', 'site']);
+]).except(['role', 'site']);
 
 except.all() // [{name: 'Adam'}, {name: 'Gergo'}]
 ```
@@ -121,7 +124,9 @@ except.all() // [{name: 'Adam'}, {name: 'Gergo'}]
 #### ``filter()``
 The ``filter`` method filters trough the items in the collection and keeps only those which pass the given truth test.
 > If no callback provides, all the falsy values will be removed.
+>
 > If you want to use inverse, use ``reject`` instead.
+>
 > This method does not modify the original collection.
 
 ```js
@@ -137,9 +142,44 @@ The ``first`` method retrives the first item from the collection.
 collect([1,2,3,4,5,6,7,8]).first(); // 1
 ```
 
+#### ``forget()``
+The ``forget`` method removes an item by its key.
+> Multiple keys are accepted.
+>
+> This method modifies the original collection!
+
+```js
+let items = collect([1,2,3,4,5,6,7,8]);
+
+items.forget(7);
+items.forget([0,1,2]);
+
+items.all(); // [4,5,6,7]
+```
+
 #### ``get()``
+The ``get`` method retrieves the value paired to the given key.
+> It accepts "nested" keys as well, via dot notation.
+>
+> If the value is not present for the given key, it returns ``null``.
+>
+> You can pass a value or closure to provide a default value.
+
+```js
+let members = collect([
+    {name: 'Adam', role: 'Front-end dev', site: 'pineco.de'},
+    {name: 'Gergo', role: 'Back-end dev', site: 'pineco.de'}
+]);
+
+members.get('0');  // {name: 'Adam', role: 'Front-end dev', site: 'pineco.de'}
+
+members.get('0.name'); // Adam
+
+members.get('1.location', 'Budapest'); // Budapest
+```
 
 #### ``has()``
+The ``has`` method
 
 #### ``implode()``
 
