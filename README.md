@@ -7,7 +7,7 @@ That means we implemented the methods for objects-in-array structure.
 
 ### Methods
 Please note, not all the methods are implemented yet!
-Also there are some minor changes compared to Laravel's collection.
+Also, there are some minor changes compared to Laravel's collection.
 
 #### ``all()``
 The ``all`` method lists the items in the collection.
@@ -49,11 +49,36 @@ The ``clone`` method clones the collection instance.
 > It's like moment.js' clone method.
 > This is not implemented in Laravel!
 
+```js
+let original = collect([1,2,3,4,5,6])
+
+original.clone().all() // [1,2,3,4,5,6]
+```
+
 #### ``contains()``
+The ``contains`` method checks if the given item is present in the collection.
+
+```js
+collect([1,2,3,4,5]).contains(5) // true
+
+collect([1,2,3,4,5]).contains(6) // false
+```
 
 #### ``count()``
+The ``count`` method returns the number of items in the collection.
+
+```js
+collect([1,2,3,4]).count() // 4
+```
 
 #### ``diff()``
+The ``diff`` method compares the collection items to an array and returns the items of the collection which not present in the given array.
+
+```js
+let diff = collect([1,2,3,4,5,6,7]).diff([1,2,6,7])
+
+diff.all() // [3,4,5]
+```
 
 #### ``each()``
 

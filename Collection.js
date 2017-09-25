@@ -95,9 +95,7 @@ class Collection
     each(callback)
     {
         for (let i in this.items) {
-            if (callback(this.items[i], i) === false) {
-                return false;
-            }
+            if (callback(this.items[i], i) === false) return false;
         }
     }
 
@@ -117,9 +115,7 @@ class Collection
         keys = Array.isArray(keys) ? keys : [keys];
 
         return this.map(item => {
-            keys.forEach(key => {
-                if (item.hasOwnProperty(key)) delete item[key];
-            });
+            keys.forEach(key => { if (item.hasOwnProperty(key)) delete item[key]; });
 
             return item;
         });
@@ -277,9 +273,7 @@ class Collection
         keys = Array.isArray(keys) ? keys : [keys];
 
         return this.map(item => {
-            Object.keys(item).forEach(key => {
-                if (! keys.includes(key)) delete item[key];
-            });
+            Object.keys(item).forEach(key => { if (! keys.includes(key)) delete item[key]; });
 
             return item;
         });
@@ -374,9 +368,7 @@ class Collection
     search(item)
     {
         for (let i in this.items) {
-            if (JSON.stringify(this.items[i]) === JSON.stringify(item)) {
-                return i;
-            }
+            if (JSON.stringify(this.items[i]) === JSON.stringify(item)) return i;
         }
 
         return false;
@@ -559,11 +551,7 @@ class Collection
         let items = this.items.reduce((items, item) => {
             if (! items.contains(item)) {
                 items.push(item);
-                if (key) {
-                    let counter = {};
-                    counter[key] = 1;
-                    counts.push(counter);
-                }
+                if (key) counts.push({[key]: 1});
             } else if(key) {
                 counts[items.search(item)][key]++;
             }
@@ -571,9 +559,7 @@ class Collection
             return items;
         }, new this.constructor);
       
-        if (key) {
-           items.transform((item, index) => Object.assign({}, item, counts[index]))
-        }
+        if (key) items.transform((item, index) => Object.assign({}, item, counts[index]));
 
         return items;
     }
