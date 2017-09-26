@@ -144,9 +144,11 @@ class Collection
     /**
      * Get the first item from the collection.
      */
-    first()
+    first(callback = null)
     {
-        return this.items[0] || null;
+        if (! callback) return this.items[0] || null;
+
+        return this.filter(callback).first();
     }
 
     /**
@@ -216,9 +218,11 @@ class Collection
     /**
      * Get the last element in the collection.
      */
-    last()
+    last(callback = null)
     {
-        return this.items[this.count() - 1];
+        if (! callback) return this.items[this.count() - 1] || null;
+        
+        return this.filter(callback).last();
     }
 
     /**
@@ -260,9 +264,9 @@ class Collection
     /**
      * Get the nt-h element in the collection.
      */
-    nth(n)
+    nth(n, offset = 0)
     {
-        return this.items[n--];
+        return this.filter((item, key) => (key + offset + 1) % n === 0);
     }
 
     /**
