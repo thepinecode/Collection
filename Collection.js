@@ -19,7 +19,7 @@ class Collection
     /**
      * Get all of the items in the collection.
      */
-    avg(key = null)
+    avg(key)
     {
         return this.sum(key) / this.count();
     }
@@ -59,15 +59,15 @@ class Collection
     }
 
     /**
-     * Determines if the key / value pair exists.
+     * Determines if the index / value pair exists.
      */
-    contains(key, value = null)
+    contains(index, value)
     {
-        if (value && this.items.hasOwnProperty(key)) {
-            return JSON.stringify(this.items[key]) === JSON.stringify(value);
+        if (value && this.items.hasOwnProperty(index)) {
+            return JSON.stringify(this.items[index]) === JSON.stringify(value);
         }
         for (let i in this.items) {
-            if (JSON.stringify(key) === JSON.stringify(this.items[i])) return true;
+            if (JSON.stringify(index) === JSON.stringify(this.items[i])) return true;
         }
 
         return false;
@@ -86,7 +86,7 @@ class Collection
      */
     diff(items)
     {
-        return new this.constructor(this.items.filter((item, key) => items.indexOf(item) < 0));
+        return new this.constructor(this.items.filter((item, index) => items.indexOf(item) < 0));
     }
 
     /**
@@ -134,17 +134,17 @@ class Collection
     /**
      * Filter trough the collection items.
      */
-    filter(callback = null)
+    filter(callback)
     {
         if (! callback) return new this.constructor(this.items.filter(item => item));
 
-        return new this.constructor(this.items.filter((item, key) => callback(item, key)));
+        return new this.constructor(this.items.filter((item, index) => callback(item, index)));
     }
 
     /**
      * Get the first item from the collection.
      */
-    first(callback = null)
+    first(callback)
     {
         if (! callback) return this.items[0] || null;
 
@@ -154,11 +154,11 @@ class Collection
     /**
      * Remove items from the collection by keys.
      */
-    forget(key)
+    forget(index)
     {
-        key = Array.isArray(key) ? key : [key];
+        index = Array.isArray(index) ? index : [index];
 
-        key.forEach(key => this.items.splice(key, 1));
+        index.forEach(index => this.items.splice(index, 1));
 
         return this;
     }
@@ -166,19 +166,19 @@ class Collection
     /**
      * Get an item from the collection by key.
      */
-    get(key, value = null)
+    get(index, value)
     {
         if (typeof value === 'function') value = value();
 
-        return this._extract(key, this.items, value)
+        return this._extract(index, this.items, value)
     }
 
     /**
      * Determine if the collection has item by the given key.
      */
-    has(key)
+    has(index)
     {
-        return this.items.hasOwnProperty(key);
+        return this.items.hasOwnProperty(index);
     }
 
     /**
@@ -218,7 +218,7 @@ class Collection
     /**
      * Get the last element in the collection.
      */
-    last(callback = null)
+    last(callback)
     {
         if (! callback) return this.items[this.count() - 1] || null;
 
@@ -236,7 +236,7 @@ class Collection
     /**
      * Get the max value by the given key.
      */
-    max(key = null)
+    max(key)
     {
         if (! key) return Math.max(...this.items);
 
@@ -254,7 +254,7 @@ class Collection
     /**
      * Get the min value by the given key.
      */
-    min(key = null)
+    min(key)
     {
         if (! key) return Math.min(...this.items);
 
@@ -312,9 +312,9 @@ class Collection
     /**
      * Get and remove an item from the collection.
      */
-    pull(key)
+    pull(index)
     {
-        return this.items.splice(key, 1);
+        return this.items.splice(index, 1);
     }
 
     /**
@@ -350,7 +350,7 @@ class Collection
     {
         if (! callback) return new this.constructor(this.items.filter(item => item));
 
-        return new this.constructor(this.items.filter((item, key) => ! callback(item, key)));
+        return new this.constructor(this.items.filter((item, index) => ! callback(item, index)));
     }
 
     /**
@@ -369,7 +369,11 @@ class Collection
     search(item)
     {
         for (let i in this.items) {
-            if (JSON.stringify(this.items[i]) === JSON.stringify(item)) return i;
+            if (typeof item === 'function') {
+                if (item(this.items[i], i)) return i;
+            } else if (JSON.stringify(this.items[i]) === JSON.stringify(item)) {
+                return i;
+            }
         }
 
         return false;
@@ -401,15 +405,17 @@ class Collection
     /**
      * Slice the collection by the given index and size.
      */
-    slice(index, size = null)
+    slice(index, size)
     {
+        if (size) size = size + index;
+
         return new this.constructor(this.items.slice(index, size));
     }
 
     /**
      * Sort the collection.
      */
-    sort(callback = null)
+    sort(callback)
     {
         this.items.sort((a, b) => callback ? callback(a, b) : a - b);
 
@@ -419,7 +425,7 @@ class Collection
     /**
      * Sort the collection in desc order.
      */
-    sortDesc(callback = null)
+    sortDesc(callback)
     {
         return this.sort(callback).reverse();
     }
@@ -443,9 +449,9 @@ class Collection
     /**
      * Splice the collection by the index and the count and add exrta items to it.
      */
-    splice(index, count = 0, ...items)
+    splice(index, count, items = [])
     {
-        return new this.constructor(this.items.splice(index, count, items));
+        return new this.constructor(this.items.splice(index, count || this.count() - index, ...items));
     }
 
     /**
@@ -469,7 +475,7 @@ class Collection
     /**
      * Sum the values of the items or the callback.
      */
-    sum(key = null)
+    sum(key)
     {
         if (typeof key === 'function') return this.reduce((carry, item) => key(carry, item));
 
@@ -537,7 +543,7 @@ class Collection
      */
     transform(callback)
     {
-        this.items = this.items.map((item, key) => callback(item, key));
+        this.items = this.items.map((item, index) => callback(item, index));
 
         return this;
     }
@@ -545,7 +551,7 @@ class Collection
     /**
      * Filter only unique items in the collection.
      */
-    unique(key = null)
+    unique(key)
     {
         let counts = [];
 
@@ -594,7 +600,7 @@ class Collection
      */
     _extract(key, item, value = null)
     {
-        return key.split('.').reduce((t, i) => t[i] || value, item)
+        return key.toString().split('.').reduce((t, i) => t[i] || value, item);
     }
 }
 
