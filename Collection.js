@@ -221,7 +221,7 @@ class Collection
     last(callback = null)
     {
         if (! callback) return this.items[this.count() - 1] || null;
-        
+
         return this.filter(callback).last();
     }
 
@@ -248,7 +248,7 @@ class Collection
      */
     merge(items)
     {
-        return new this.constructor(this.items.concat(items));
+        return (new this.constructor(this.items.concat(items))).unique();
     }
 
     /**
@@ -266,7 +266,7 @@ class Collection
      */
     nth(n, offset = 0)
     {
-        return this.filter((item, key) => (key + offset + 1) % n === 0);
+        return this.filter((item, key) => (key + offset) % n === 0);
     }
 
     /**
@@ -288,10 +288,7 @@ class Collection
      */
     pluck(key)
     {
-        return new this.constructor(
-            this.items.map(item => this._extract(key, item))
-                .filter(item => item)
-        );
+        return this.map(item => this._extract(key, item)).filter();
     }
 
     /**
@@ -562,7 +559,7 @@ class Collection
 
             return items;
         }, new this.constructor);
-      
+
         if (key) items.transform((item, index) => Object.assign({}, item, counts[index]));
 
         return items;

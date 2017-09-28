@@ -74,7 +74,7 @@ collect([1,2,3,4]).count(); // 4
 ```
 
 #### ``diff()``
-The diff method compares the collection against another collection or an array based on its values. 
+The diff method compares the collection against another collection or an array based on its values.
 This method will return the values in the original collection that are not present in the given collection:
 > This method does not modify the original collection.
 
@@ -117,7 +117,7 @@ The ``except`` method returns all items in the collection except for those with 
 
 ```js
 let except = collect([
-    {name: 'Adam', role: 'Front-end dev', site: 'pineco.de'}, 
+    {name: 'Adam', role: 'Front-end dev', site: 'pineco.de'},
     {name: 'Gergo', role: 'Back-end dev', site: 'pineco.de'}
 ]).except(['role', 'site']);
 
@@ -171,7 +171,7 @@ The ``get`` method returns the item at a given key. If the key does not exist, n
 > If the value is not present for the given key, it returns ``null``.
 >
 > You may optionally pass a default value as the second argument.
-> You may even pass a callback as the default value. 
+> You may even pass a callback as the default value.
 > The result of the callback will be returned if the specified key does not exist.
 
 ```js
@@ -197,7 +197,7 @@ collect([1,2,3]).has(3); // false
 ```
 
 #### ``implode()``
-The ``implode`` method joins the items in a collection. Its arguments depend on the type of items in the collection. 
+The ``implode`` method joins the items in a collection. Its arguments depend on the type of items in the collection.
 If the collection contains objects, you should pass the key of the attributes you wish to join, and the "glue" string you wish to place between the values:
 
 ```js
@@ -241,7 +241,7 @@ collect([1,2,3,4]).last() // 4
 ```
 
 #### ``map()``
-The ``map`` method iterates through the collection and passes each value to the given callback. 
+The ``map`` method iterates through the collection and passes each value to the given callback.
 The callback is free to modify the item and return it, thus forming a new collection of modified items:
 > This method does not modify the original collection!
 >
@@ -263,11 +263,16 @@ collect([{price: 200}, {price: 250}, {price: 300}]).max('price'); // 300
 ```
 
 #### ``merge()``
-The ``merge`` method merges the given array or collection with the original collection. 
-If a string key in the given items matches a string key in the original collection, the given items's value will overwrite the value in the original collection:
+The ``merge`` method merges the given array or collection with the original collection:
+> This method works differently than Laravel's.
+> It's like basic array concatnation with unique values.
+>
+> Every duplicates will be removed in the new collection.
 
 ```js
+let merged = collect([1,2,3,4,5]).merge([1,2,6,7,8]);
 
+merged.all(); // [1,2,3,4,5,6,7,8]
 ```
 
 #### ``min()``
@@ -280,29 +285,120 @@ collect([{price: 200}, {price: 250}, {price: 300}]).max('price'); // 200
 ```
 
 #### ``nth()``
-The ``nth`` method creates a new collection consisting of every n-th element:
+The ``nth`` method creates a new collection consisting of every n-th element.
+You may optionally pass an offset as the second argument:
 
 ```js
+collect([1,2,3,4,5,6,7,8]).nth(2); // [1,3,5,7]
 
+collect([1,2,3,4,5,6,7,8]).nth(2, 1); // [2,4,6,8]
 ```
 
 #### ``only()``
+The ``only`` method returns the items in the collection with the specified keys:
+> This method works only with object '{}' items.
+>
+> This method does not modify the original collection.
+>
+> For the inverse of ``only``, see the ``except`` method.
+
+```js
+let except = collect([
+    {name: 'Adam', role: 'Front-end dev', site: 'pineco.de'},
+    {name: 'Gergo', role: 'Back-end dev', site: 'pineco.de'}
+]).only(['role', 'site']);
+
+except.all() // [{role: 'Front-end dev', site: 'pineco.de'}, {role: 'Back-end dev', site: 'pineco.de'}]
+```
 
 #### ``pluck()``
+The ``pluck`` method retrieves all of the values for a given key:
+> You can pass nested keys as well.
+
+```js
+collect([
+    {name: 'Product 1', meta: {weight: 300, sku: 'p_1'}},
+    {name: 'Product 2', meta: {weight: 310, sku: 'p_2'}},
+    {name: 'Product 3', meta: {weight: 320, sku: 'p_3'}},
+    {name: 'Product 4', meta: {weight: 330, sku: 'p_4'}}
+]).pluck('meta.weight'); // [300, 310, 320, 330]
+```
 
 #### ``pop()``
+The ``pop`` method removes and returns the last item from the collection:
+> This method modifies the original collection!
+
+```js
+let items = collect([1,2,3,4,5,6]);
+
+items.pop(); // 6
+
+items.all(); // [1,2,3,4,5]
+```
 
 #### ``prepend()``
+The ``prepend`` method adds an item to the beginning of the collection:
+> This method modifies the original collection!
+
+```js
+let items = collect([1,2,3,4,5,6]).prepend(0);
+
+items.all(); // [0,1,2,3,4,5,6]
+```
 
 #### ``pull()``
+The ``pull`` method removes and returns an item from the collection by its key:
+> This method modifies the original collection!
+
+```js
+let items = collect([1,2,3,4,5,6]);
+
+items.pull(4); // 5
+
+items.all(); // [1,2,3,4,6]
+```
 
 #### ``push()``
+The ``push`` method appends an item to the end of the collection:
+> This method modifies the original collection!
+
+```js
+let items = collect([1,2,3,4,5,6]).push(7);
+
+items.all(); // [1,2,3,4,5,6,7]
+```
 
 #### ``random()``
+The ``random`` method returns a random item from the collection:
+
+```js
+let items = collect([1,2,3,4,5]);
+
+items.random(); // 4 (retrieved randomly)
+```
 
 #### ``reduce()``
+The reduce method reduces the collection to a single value, passing the result of each iteration into the subsequent iteration.
+The value for ``carry`` on the first iteration is ``null``; however, you may specify its initial value by passing a second argument to ``reduce``:
+
+```js
+collect([1,2,3,4,5,6]).reduce((carry, item) => carry + item); // 21
+
+collect([1,2,3,4,5,6]).reduce((carry, item) => carry + item, 10); // 31
+```
 
 #### ``reject()``
+The ``reject`` method filters the collection using the given callback.
+The callback should return ``true`` if the item should be removed from the resulting collection:
+> This method modifies the original collection!
+>
+> For the inverse of the ``reject`` method, see the ``filter`` method.
+
+```js
+let rejected = collect([1,2,3,4,5,6,7,8]).reject((item, key) => item > 3);
+
+rejected.all(); // [1,2,3.1]
+```
 
 #### ``reverse()``
 
