@@ -3,14 +3,14 @@
 Collection is a light-weight implementation of Laravel's collection.
 
 We created this library to work easily with datas from an API end.
-That means we implemented the methods for objects-in-array structure.
+That means we implemented the methods to work well with objects-in-array structure (``[{}, {}, {}]``).
 
 ### Methods
 Please note, not all the methods are implemented yet!
 Also, there are some minor changes compared to Laravel's collection.
 
-In the docs we replaced keys with indexes.
-If we use keys, it refers to Objects '{}', if we use indexes, it refers to arrays '[]'.
+In the docs and the code as well, we use both ``key`` and ``index`` expressions.
+If we use ``key``, it refers to objects (``{}``), if we use ``index``, it refers to arrays (``[]``).
 
 #### ``all()``
 The ``all`` method returns the underlying array represented by the collection:
@@ -92,7 +92,7 @@ The ``each`` method iterates over the items in the collection and passes each it
 If you would like to stop iterating through the items, you may return ``false`` from your callback:
 
 ```js
-collect([1, 2, 3, 4, 5, 6, 7, 8]).each((item, key) => {
+collect([1, 2, 3, 4, 5, 6, 7, 8]).each((item, index) => {
     if (item > 5) {
         return false;
     }
@@ -103,9 +103,7 @@ collect([1, 2, 3, 4, 5, 6, 7, 8]).each((item, key) => {
 The ``every`` method may be used to verify that all elements of a collection pass a given truth test:
 
 ```js
-collect([1, 2, 3, 4, 5, 6, 7, 8]).every((item, key) => {
-    return item > 3;
-});
+collect([1, 2, 3, 4, 5, 6, 7, 8]).every((item, index) => item > 3);
 
 // false
 ```
@@ -136,7 +134,7 @@ The ``filter`` method filters the collection using the given callback, keeping o
 > If you want to use inverse, use ``reject`` instead.
 
 ```js
-let filtered = collect([1, 2, 3, 4, 5, 6, 7, 8]).filter((item, key) => item > 3);
+let filtered = collect([1, 2, 3, 4, 5, 6, 7, 8]).filter((item, index) => item > 3);
 
 filtered.all(); // [4, 5, 6, 7, 8]
 ```
@@ -147,7 +145,7 @@ You may also call the first method with no arguments to get the first element in
 >  If the collection is empty, ``null`` is returned.
 
 ```js
-collect([1, 2, 3, 4]).first((item, key) => item > 2); // 3
+collect([1, 2, 3, 4]).first((item, index) => item > 2); // 3
 
 collect([1, 2, 3, 4]).first(); // 1
 ```
@@ -236,7 +234,7 @@ You may also call the last method with no arguments to get the last element in t
 > If the collection is empty, null is returned.
 
 ```js
-collect([1, 2, 3, 4]).last((item, key) => item < 3); // 2
+collect([1, 2, 3, 4]).last((item, index) => item < 3); // 2
 
 collect([1, 2, 3, 4]).last() // 4
 ```
@@ -249,7 +247,7 @@ The callback is free to modify the item and return it, thus forming a new collec
 >  If you want to transform the original collection, use the ``transform`` method.
 
 ```js
-let mapped = collect([1, 2, 3, 4, 5]).map((item, key) => item * 2);
+let mapped = collect([1, 2, 3, 4, 5]).map((item, index) => item * 2);
 
 mapped.all(); // [2, 4, 6, 8, 10]
 ```
@@ -292,7 +290,7 @@ You may optionally pass an offset as the second argument:
 ```js
 collect([1, 2, 3, 4, 5, 6, 7, 8]).nth(2); // [1, 3, 5, 7]
 
-collect([1, 2, 3, 4, 5, 6, 7, 8]).nth(2, 1); // [2,4,6,8]
+collect([1, 2, 3, 4, 5, 6, 7, 8]).nth(2, 1); // [2, 4, 6, 8]
 ```
 
 #### ``only()``
@@ -309,7 +307,14 @@ let except = collect([
     {name: 'Gergo', role: 'Back-end dev', site: 'pineco.de'}
 ]).only(['role', 'site']);
 
-except.all() // [{role: 'Front-end dev', site: 'pineco.de'}, {role: 'Back-end dev', site: 'pineco.de'}]
+except.all();
+
+/*
+    [
+        {role: 'Front-end dev', site: 'pineco.de'},
+        {role: 'Back-end dev', site: 'pineco.de'}
+    ]
+*/
 ```
 
 #### ``pluck()``
@@ -324,7 +329,9 @@ collect([
     {name: 'Product 2', meta: {weight: 310, sku: 'p_2'}},
     {name: 'Product 3', meta: {weight: 320, sku: 'p_3'}},
     {name: 'Product 4', meta: {weight: 330, sku: 'p_4'}}
-]).pluck('meta.weight'); // [300, 310, 320, 330]
+]).pluck('meta.weight');
+
+// [300, 310, 320, 330]
 ```
 
 #### ``pop()``
@@ -398,7 +405,7 @@ The callback should return ``true`` if the item should be removed from the resul
 > For the inverse of the ``reject`` method, see the ``filter`` method.
 
 ```js
-let rejected = collect([1, 2, 3, 4, 5, 6, 7, 8]).reject((item, key) => item > 3);
+let rejected = collect([1, 2, 3, 4, 5, 6, 7, 8]).reject((item, index) => item > 3);
 
 rejected.all(); // [1, 2, 3]
 ```
@@ -420,7 +427,7 @@ Alternatively, you may pass in your own callback to search for the first item th
 ```js
 collect([1, 2, 3, 4, 5, 6, 7, 8]).search(7); // 6
 
-collect([1, 2, 3, 4, 5, 6, 7, 8]).search((item, key) => item > 6); // 6
+collect([1, 2, 3, 4, 5, 6, 7, 8]).search((item, index) => item > 6); // 6
 ```
 
 #### ``shift()``
@@ -532,26 +539,173 @@ If the collection contains nested objects, you should pass a key to use for dete
 In addition, you may pass your own callback to determine which values of the collection to sum:
 
 ```js
+collect([1, 2, 3, 4, 5]).sum(); // 15
 
+collect([
+    {quantity: 2},
+    {quantity: 3},
+    {quantity: 5}
+]).sum('quantity'); // 10
 
+collect([
+    {quantity: 2, price: 10},
+    {quantity: 3, price: 15},
+    {quantity: 5, price: 20}
+]).sum(item => item.quantity * item.price); // 165
 ```
 
 #### ``take()``
+The ``take`` method returns a new collection with the specified number of items.
+You may also pass a negative integer to take the specified amount of items from the end of the collection:
+
+```js
+let original = collect([0, 1, 2, 3, 4, 5]);
+
+original.take(3); // [0, 1, 2]
+
+original.take(-2); // [4, 5]
+```
 
 #### ``tap()``
+The ``tap`` method passes the collection to the given callback, allowing you to "tap" into the collection at a specific point and do something with the items while not affecting the collection itself:
+
+```js
+collect([2, 4, 3, 1, 5])
+    .sort()
+    .tap(collection => {
+        console.log(collection.all());
+    })
+    .shift();
+
+// 1
+```
 
 #### ``times()``
+The ``times`` method creates a new collection by invoking the callback a given amount of times:
+
+```js
+let items = collect().times(10, item => item);
+
+items.all(); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
 
 #### ``toggle()``
+The ``toggle`` method adds the given item to the collection if it is not present or removes it if it's in the collection.
+
+```js
+let items = collect([1, 2, 3, 4, 5]);
+
+items.toggle(1); // [2, 3, 4, 5]
+
+items.toggle(1); // [1, 2, 3, 4, 5]
+```
 
 #### ``toJson()``
+The ``toJson`` method converts the collection into a JSON serialized string:
+
+```js
+collect([
+    {quantity: 2, price: 10},
+    {quantity: 3, price: 15},
+    {quantity: 5, price: 20}
+]).toJson();
+
+// "[{"quantity":2,"price":10},{"quantity":3,"price":15},{"quantity":5,"price":20}]"
+```
 
 #### ``transform()``
+The ``transform`` method iterates over the collection and calls the given callback with each item in the collection.
+The items in the collection will be replaced by the values returned by the callback:
+> This method modifies the original collection!
+>
+> If you wish to create a new collection instead, use the ``map`` method.
 
 #### ``unique()``
+The ``unique`` method returns all of the unique items in the collection.
+Also, you may provide a key for the counts of the same items.
+If the items are objects, this count will be appended in the object as the given key.
+This every match will increment the counter.
+> This method does not modify the original collection!
+
+```js
+collect([1, 1, 2, 2, 3, 4, 2]).unique(); // [1, 2, 3, 4]
+
+let unique = collect([
+    {name: 'Item 1', price: 300},
+    {name: 'Item 2', price: 288},
+    {name: 'Item 1', price: 300},
+    {name: 'Item 1', price: 300},
+    {name: 'Item 2', price: 288}
+]).unique('in_cart');
+
+unique.all();
+
+/*
+    [
+        {name: 'Item 1', price: 300, in_cart: 3},
+        {name: 'Item 2', price: 288, in_cart: 2}
+    ]
+*/
+```
 
 #### ``where()``
+The ``where`` method filters the collection by a given key / value pair:
+> You can pass nested keys as well.
+>
+> This method works only with object '{}' items.
+
+```js
+let filtered = collect([
+    {name: 'Item 1', price: 300},
+    {name: 'Item 2', price: 300},
+    {name: 'Item 3', price: 400},
+    {name: 'Item 4', price: 450}
+]).where('price', 300);
+
+filtered.all();
+
+/*
+    [
+        {name: 'Item 1', price: 300},
+        {name: 'Item 1', price: 300}
+    ]
+*/
+```
 
 #### ``whereIn()``
+The ``whereIn`` method filters the collection by a given key / value contained within the given array:
+
+```js
+let filtered = collect([
+    {name: 'Item 1', price: 300},
+    {name: 'Item 2', price: 300},
+    {name: 'Item 3', price: 400},
+    {name: 'Item 4', price: 450}
+]).whereIn('price', [300, 400]);
+
+filtered.all();
+
+/*
+    [
+        {name: 'Item 1', price: 300},
+        {name: 'Item 1', price: 300},
+        {name: 'Item 3', price: 400}
+    ]
+*/
+```
 
 #### ``whereNotIn()``
+The ``whereNotIn`` method filters the collection by a given key / value not contained within the given array:
+
+```js
+let filtered = collect([
+    {name: 'Item 1', price: 300},
+    {name: 'Item 2', price: 300},
+    {name: 'Item 3', price: 400},
+    {name: 'Item 4', price: 450}
+]).whereNotIn('price', [300, 400]);
+
+filtered.all();
+
+// [{name: 'Item 4', price: 450}]
+```

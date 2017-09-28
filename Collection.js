@@ -477,7 +477,7 @@ class Collection
      */
     sum(key)
     {
-        if (typeof key === 'function') return this.reduce((carry, item) => key(carry, item));
+        if (typeof key === 'function') return this.reduce((carry, item) => key(item) + carry);
 
         return this.reduce((carry, item) => (key ? this._extract(key, item, 0) : item) + carry);
     }
@@ -505,7 +505,7 @@ class Collection
     /**
      * Static way to create collections.
      */
-    static times(number, callback)
+    times(number, callback)
     {
         let items = [];
 
@@ -513,7 +513,7 @@ class Collection
             items.push(callback(i));
         }
 
-        return new Collection(items);
+        return this.fill(items);
     }
 
     /**
@@ -607,3 +607,4 @@ class Collection
 const collect = (items = []) => new Collection(items);
 
 export { Collection as default, collect };
+
