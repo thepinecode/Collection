@@ -620,11 +620,19 @@ The items in the collection will be replaced by the values returned by the callb
 >
 > If you wish to create a new collection instead, use the ``map`` method.
 
+```js
+let transformed = collect([1, 2, 3, 4, 5]);
+
+transformed.transform((item, index) => item * 2);
+
+transformed.all(); // [2, 4, 6, 8, 10]
+```
+
 #### ``unique()``
 The ``unique`` method returns all of the unique items in the collection.
 Also, you may provide a key for the counts of the same items.
 If the items are objects, this count will be appended in the object as the given key.
-This every match will increment the counter.
+Every match of the same item will increment the counter.
 > This method does not modify the original collection!
 
 ```js

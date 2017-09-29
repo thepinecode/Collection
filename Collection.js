@@ -33,7 +33,7 @@ class Collection
         chunks = this.count() / size;
 
         while(i < chunks){
-            sets[i] = items.splice(0, size);
+            sets[i] = new this.constructor(items.splice(0, size));
             i++;
         }
 
@@ -607,4 +607,3 @@ class Collection
 const collect = (items = []) => new Collection(items);
 
 export { Collection as default, collect };
-
