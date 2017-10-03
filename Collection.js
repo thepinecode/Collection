@@ -17,6 +17,14 @@ class Collection
     }
 
     /**
+     * Alias for the avg method.
+     */
+    average(key)
+    {
+        return this.avg(key);
+    }
+
+    /**
      * Get all of the items in the collection.
      */
     avg(key)
@@ -253,6 +261,26 @@ class Collection
     }
 
     /**
+     * Get the median value of the given key.
+     */
+    median(key)
+    {
+        key ? this.sortBy(key) : this.sort();
+
+        let middle = Math.floor(this.count() / 2);
+        let item = this.items[middle];
+
+        if (this.count() % 2) {
+            return key ? this._extract(key, item) : item;
+        } else {
+            return (key
+                    ? (this._extract(key, this.items[middle - 1]) + this._extract(key, item))
+                    : (this.items[middle - 1] + item)
+            ) / 2.0;
+        }
+    }
+
+    /**
      * Merge the items to the collection.
      */
     merge(items)
@@ -268,6 +296,24 @@ class Collection
         if (! key) return Math.min(...this.items);
 
         return this.pluck(key).min();
+    }
+
+    /**
+     * Get the mode value by the given key.
+     *
+     * https://stackoverflow.com/questions/40410470/highest-occurrence-in-an-array-or-first-selected/40410898#40410898
+     */
+    mode(key)
+    {
+        let map = this.items.map(
+            (a) => this.items.filter(
+                (b) => key ? (this._extract(key, a) === this._extract(key, b)) : (a === b)
+            ).length
+        );
+
+        return key
+            ? this._extract(key, this.items[map.indexOf(Math.max.apply(null, map))])
+            : this.items[map.indexOf(Math.max.apply(null, map))];
     }
 
     /**

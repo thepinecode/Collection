@@ -14,10 +14,9 @@ Also, there are some minor changes compared to Laravel's collection.
 In the docs and the code as well, we use both ``key`` and ``index`` expressions.
 If we use ``key``, it refers to objects, like ``{}``, if we use ``index``, it refers to arrays, like ``[]``.
 
-### Unimplemented Methods
-
 ### Available Methods
 - [``all``](#all)
+- [``average``](#average)
 - [``avg``](#avg)
 - [``chunk``](#chunk)
 - [``clear``](#clear)
@@ -40,8 +39,10 @@ If we use ``key``, it refers to objects, like ``{}``, if we use ``index``, it re
 - [``last``](#last)
 - [``map``](#map)
 - [``max``](#max)
+- [``median``](#median)
 - [``merge``](#merge)
 - [``min``](#min)
+- [``mode``](#mode)
 - [``nth``](#nth)
 - [``only``](#only)
 - [``pluck``](#pluck)
@@ -74,12 +75,55 @@ If we use ``key``, it refers to objects, like ``{}``, if we use ``index``, it re
 - [``whereIn``](#wherein)
 - [``whereNotIn``](#wherenotin)
 
+### Unimplemented Methods
+- [``collapse``](https://laravel.com/docs/5.5/collections#method-collapse)
+- [``combine``](https://laravel.com/docs/5.5/collections#method-combine)
+- [``containsStrict``](https://laravel.com/docs/5.5/collections#method-containsstrict)
+- [``crossJoin``](https://laravel.com/docs/5.5/collections#method-crossjoin)
+- [``dd``](https://laravel.com/docs/5.5/collections#method-dd)
+- [``diffAssoc``](https://laravel.com/docs/5.5/collections#method-diffassoc)
+- [``diffKeys``](https://laravel.com/docs/5.5/collections#method-diffkeys)
+- [``dump``](https://laravel.com/docs/5.5/collections#method-dump)
+- [``eachSpread``](https://laravel.com/docs/5.5/collections#method-eachspread)
+- [``flatMap``](https://laravel.com/docs/5.5/collections#method-flatmap)
+- [``flatten``](https://laravel.com/docs/5.5/collections#method-flatten)
+- [``flip``](https://laravel.com/docs/5.5/collections#method-flip)
+- [``forPage``](https://laravel.com/docs/5.5/collections#method-forpage)
+- [``intersect``](https://laravel.com/docs/5.5/collections#method-intersect)
+- [``intersectByKeys``](https://laravel.com/docs/5.5/collections#method-intersectbykeys)
+- [``keyBy``](https://laravel.com/docs/5.5/collections#method-keyby)
+- [``macro``](https://laravel.com/docs/5.5/collections#method-macro)
+- [``make``](https://laravel.com/docs/5.5/collections#method-make)
+- [``mapInto``](https://laravel.com/docs/5.5/collections#method-mapinto)
+- [``mapSpread``](https://laravel.com/docs/5.5/collections#method-mapspread)
+- [``mapToGroups``](https://laravel.com/docs/5.5/collections#method-maptogroups)
+- [``mapWithKeys``](https://laravel.com/docs/5.5/collections#method-mapwithkeys)
+- [``pad``](https://laravel.com/docs/5.5/collections#method-pad)
+- [``particion``](https://laravel.com/docs/5.5/collections#method-partition)
+- [``pipe``](https://laravel.com/docs/5.5/collections#method-pipe)
+- [``put``](https://laravel.com/docs/5.5/collections#method-put)
+- [``toArray``](https://laravel.com/docs/5.5/collections#method-toarray)
+- [``union``](https://laravel.com/docs/5.5/collections#method-union)
+- [``uniqueStrict``](https://laravel.com/docs/5.5/collections#method-uniquestrict)
+- [``unless``](https://laravel.com/docs/5.5/collections#method-unless)
+- [``unwrap``](https://laravel.com/docs/5.5/collections#method-unwrap)
+- [``values``](https://laravel.com/docs/5.5/collections#method-values)
+- [``whereStrict``](https://laravel.com/docs/5.5/collections#method-wherestrict)
+- [``whereStrict``](https://laravel.com/docs/5.5/collections#method-wherestrict)
+- [``whereInStrict``](https://laravel.com/docs/5.5/collections#method-whereinstrict)
+- [``whereNotInStrict``](https://laravel.com/docs/5.5/collections#method-wherenotinstrict)
+- [``wrap``](https://laravel.com/docs/5.5/collections#method-wrap)
+- [``zip``](https://laravel.com/docs/5.5/collections#method-zip)
+
 #### ``all()``
 The ``all`` method returns the underlying array represented by the collection:
 
 ```js
 collect([1, 2, 3, 4]).all(); // [1, 2, 3, 4]
 ```
+
+#### ``average()``
+Alias for the ``avg`` method.
 
 #### ``avg()``
 The ``avg`` method returns the average value of a given key:
@@ -333,13 +377,30 @@ collect([1, 6, 2, 4, 7, 8, 3]).max(); // 8
 collect([{price: 200}, {price: 250}, {price: 300}]).max('price'); // 300
 ```
 
+#### ``median()``
+The ``median`` method returns the median value of a given key:
+
+```js
+collect([1,2,3,4,5,6]).median(); // 3.5
+
+collect([1,2,3,4,5]).median(); // 3
+
+collect([{price: 1}, {price: 2}, {price: 3}]).median('price'); // 2
+
+collect([
+    {price: {normal: 2}},
+    {price: {normal: 4}},
+    {price: {normal: 10}}
+]).median('price.normal'); // 4
+```
+
 #### ``merge()``
 The ``merge`` method merges the given array or collection with the original collection:
 > This method works differently than Laravel's.
 > It's like basic array concatnation with unique values.
 >
 > Every duplicates will be removed in the new collection.
-> You may use ``merge`` instead of ``concat`` to keep duplications after concatnation.
+> You may use ``concat`` instead of ``merge`` to keep duplications after concatnation.
 
 ```js
 let merged = collect([1, 2, 3, 4, 5]).merge([1, 2, 6, 7, 8]);
@@ -351,9 +412,22 @@ merged.all(); // [1, 2, 3, 4, 5, 6, 7, 8]
 The ``min`` method returns the minimum value of a given key:
 
 ```js
-collect([1, 6, 2, 4, 7, 8, 3]).max(); // 1
+collect([1, 6, 2, 4, 7, 8, 3]).min(); // 1
 
-collect([{price: 200}, {price: 250}, {price: 300}]).max('price'); // 200
+collect([{price: 200}, {price: 250}, {price: 300}]).min('price'); // 200
+```
+
+#### ``mode()``
+The ``mode`` method returns the mode value of a given key:
+
+```js
+collect([1,2,2,2,2,2,2,3,3,3,3,4,5]).mode(); // 2
+
+collect([
+    {price: {normal: 2}},
+    {price: {normal: 4}},
+    {price: {normal: 4}}
+]).mode('price.normal'); // 4
 ```
 
 #### ``nth()``
