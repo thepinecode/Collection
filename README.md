@@ -421,7 +421,7 @@ collect([{price: 200}, {price: 250}, {price: 300}]).min('price'); // 200
 The ``mode`` method returns the mode value of a given key:
 
 ```js
-collect([1,2,2,2,2,2,2,3,3,3,3,4,5]).mode(); // 2
+collect([1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 5]).mode(); // 2
 
 collect([
     {price: {normal: 2}},
