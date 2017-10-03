@@ -66,6 +66,7 @@ class Collection
         if (value && this.items.hasOwnProperty(index)) {
             return JSON.stringify(this.items[index]) === JSON.stringify(value);
         }
+
         for (let i in this.items) {
             if (JSON.stringify(index) === JSON.stringify(this.items[i])) return true;
         }
@@ -115,7 +116,7 @@ class Collection
         keys = Array.isArray(keys) ? keys : [keys];
 
         return this.map(item => {
-            keys.forEach(key => { if (item.hasOwnProperty(key)) delete item[key]; });
+            keys.forEach(key => { if (item.hasOwnProperty(key)) delete item[key] });
 
             return item;
         });
@@ -277,7 +278,7 @@ class Collection
         keys = Array.isArray(keys) ? keys : [keys];
 
         return this.map(item => {
-            Object.keys(item).forEach(key => { if (! keys.includes(key)) delete item[key]; });
+            Object.keys(item).forEach(key => { if (! keys.includes(key)) delete item[key] });
 
             return item;
         });

@@ -5,12 +5,18 @@ Collection is a light-weight implementation of Laravel's collection.
 We created this library to work easily with datas from an API end.
 That means we implemented the methods to work well with objects-in-array structure (``[{}, {}, {}]``).
 
-### Methods
+## Methods
 Please note, not all the methods are implemented yet!
 Also, there are some minor changes compared to Laravel's collection.
 
 In the docs and the code as well, we use both ``key`` and ``index`` expressions.
 If we use ``key``, it refers to objects (``{}``), if we use ``index``, it refers to arrays (``[]``).
+
+### Unimplemented Methods
+
+### Available Methods
+- [``all``](#all)
+- [``avg``](#avg)
 
 #### ``all()``
 The ``all`` method returns the underlying array represented by the collection:
