@@ -5,6 +5,8 @@ Collection is a light-weight implementation of Laravel's collection.
 We created this library to work easily with datas from an API end.
 That means we implemented the methods to work well with objects-in-array structure (``[{}, {}, {}]``).
 
+## Gettings Started
+
 ## Methods
 Please note, not all the methods are implemented yet!
 Also, there are some minor changes compared to Laravel's collection.
@@ -17,6 +19,60 @@ If we use ``key``, it refers to objects (``{}``), if we use ``index``, it refers
 ### Available Methods
 - [``all``](#all)
 - [``avg``](#avg)
+- [``chunk``](#chunk)
+- [``clear``](#clear)
+- [``clone``](#clone)
+- [``contains``](#contains)
+- [``count``](#count)
+- [``diff``](#diff)
+- [``each``](#each)
+- [``every``](#every)
+- [``except``](#except)
+- [``filter``](#filter)
+- [``first``](#first)
+- [``forget``](#forget)
+- [``get``](#get)
+- [``has``](#has)
+- [``implode``](#implode)
+- [``isEmpty``](#isEmpty)
+- [``isNotEmpty``](#isNotEmpty)
+- [``keys``](#keys)
+- [``last``](#last)
+- [``map``](#map)
+- [``max``](#max)
+- [``merge``](#merge)
+- [``min``](#min)
+- [``nth``](#nth)
+- [``only``](#only)
+- [``pluck``](#pluck)
+- [``pop``](#pop)
+- [``prepend``](#prepend)
+- [``push``](#push)
+- [``pull``](#pull)
+- [``random``](#random)
+- [``reduce``](#reduce)
+- [``reject``](#reject)
+- [``reverse``](#reverse)
+- [``search``](#search)
+- [``shift``](#shift)
+- [``reverse``](#reverse)
+- [``shuffle``](#shuffle)
+- [``slice``](#slice)
+- [``sort``](#sort)
+- [``sortDesc``](#sortDesc)
+- [``sortBy``](#sortBy)
+- [``sortByDesc``](#sortByDesc)
+- [``splice``](#splice)
+- [``split``](#split)
+- [``take``](#take)
+- [``tap``](#tap)
+- [``times``](#times)
+- [``toJson``](#toJson)
+- [``transform``](#transform)
+- [``unique``](#unique)
+- [``where``](#where)
+- [``whereIn``](#whereIn)
+- [``whereNotIn``](#whereNotIn)
 
 #### ``all()``
 The ``all`` method returns the underlying array represented by the collection:
