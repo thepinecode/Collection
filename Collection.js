@@ -59,6 +59,14 @@ class Collection
     }
 
     /**
+     * Concat the given values with the collection items.
+     */
+    concat(items)
+    {
+        return (new this.constructor(this.items.concat(items)));
+    }
+
+    /**
      * Determines if the index / value pair exists.
      */
     contains(index, value)
@@ -249,7 +257,7 @@ class Collection
      */
     merge(items)
     {
-        return (new this.constructor(this.items.concat(items))).unique();
+        return this.concat(items).unique();
     }
 
     /**

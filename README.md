@@ -3,7 +3,7 @@
 Collection is a light-weight implementation of Laravel's collection.
 
 We created this library to work easily with datas from an API end.
-That means we implemented the methods to work well with objects-in-array structure (``[{}, {}, {}]``).
+That means we implemented the methods to work well with objects-in-array structure, like ``[{}, {}, {}]``.
 
 ## Gettings Started
 
@@ -12,7 +12,7 @@ Please note, not all the methods are implemented yet!
 Also, there are some minor changes compared to Laravel's collection.
 
 In the docs and the code as well, we use both ``key`` and ``index`` expressions.
-If we use ``key``, it refers to objects (``{}``), if we use ``index``, it refers to arrays (``[]``).
+If we use ``key``, it refers to objects, like ``{}``, if we use ``index``, it refers to arrays, like ``[]``.
 
 ### Unimplemented Methods
 
@@ -34,8 +34,8 @@ If we use ``key``, it refers to objects (``{}``), if we use ``index``, it refers
 - [``get``](#get)
 - [``has``](#has)
 - [``implode``](#implode)
-- [``isEmpty``](#isEmpty)
-- [``isNotEmpty``](#isNotEmpty)
+- [``isEmpty``](#isempty)
+- [``isNotEmpty``](#isnotempty)
 - [``keys``](#keys)
 - [``last``](#last)
 - [``map``](#map)
@@ -59,20 +59,20 @@ If we use ``key``, it refers to objects (``{}``), if we use ``index``, it refers
 - [``shuffle``](#shuffle)
 - [``slice``](#slice)
 - [``sort``](#sort)
-- [``sortDesc``](#sortDesc)
-- [``sortBy``](#sortBy)
-- [``sortByDesc``](#sortByDesc)
+- [``sortDesc``](#sortdesc)
+- [``sortBy``](#sortby)
+- [``sortByDesc``](#sortbydesc)
 - [``splice``](#splice)
 - [``split``](#split)
 - [``take``](#take)
 - [``tap``](#tap)
 - [``times``](#times)
-- [``toJson``](#toJson)
+- [``toJson``](#tojson)
 - [``transform``](#transform)
 - [``unique``](#unique)
 - [``where``](#where)
-- [``whereIn``](#whereIn)
-- [``whereNotIn``](#whereNotIn)
+- [``whereIn``](#wherein)
+- [``whereNotIn``](#wherenotin)
 
 #### ``all()``
 The ``all`` method returns the underlying array represented by the collection:
@@ -120,6 +120,16 @@ The ``clone`` method clones the collection instance:
 let original = collect([1, 2, 3, 4, 5, 6]);
 
 original.clone().all(); // [1, 2, 3, 4, 5, 6]
+```
+
+#### ``concat()``
+The ``concat`` method appends the given array or collection values onto the end of the collection:
+> You may use ``merge`` instead of ``concat`` to have unique values after concatnation.
+
+```js
+let concatnated = collect([1, 2, 3, 4, 5]).concat([1, 2, 6, 7, 8]);
+
+concatnated.all(); // [1, 2, 3, 4, 1, 2, 6, 7, 8]
 ```
 
 #### ``contains()``
@@ -329,6 +339,7 @@ The ``merge`` method merges the given array or collection with the original coll
 > It's like basic array concatnation with unique values.
 >
 > Every duplicates will be removed in the new collection.
+> You may use ``merge`` instead of ``concat`` to keep duplications after concatnation.
 
 ```js
 let merged = collect([1, 2, 3, 4, 5]).merge([1, 2, 6, 7, 8]);
