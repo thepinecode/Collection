@@ -21,6 +21,7 @@ If we use ``key``, it refers to objects, like ``{}``, if we use ``index``, it re
 - [``chunk``](#chunk)
 - [``clear``](#clear)
 - [``clone``](#clone)
+- [``concat``](#concat)
 - [``contains``](#contains)
 - [``count``](#count)
 - [``diff``](#diff)
