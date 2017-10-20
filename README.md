@@ -46,6 +46,7 @@ If we use ``key``, it refers to objects, like ``{}``, if we use ``index``, it re
 - [``mode``](#mode)
 - [``nth``](#nth)
 - [``only``](#only)
+- [``pad``](#pad)
 - [``pluck``](#pluck)
 - [``pop``](#pop)
 - [``prepend``](#prepend)
@@ -97,9 +98,9 @@ If we use ``key``, it refers to objects, like ``{}``, if we use ``index``, it re
 - [``make``](https://laravel.com/docs/5.5/collections#method-make)
 - [``mapInto``](https://laravel.com/docs/5.5/collections#method-mapinto)
 - [``mapSpread``](https://laravel.com/docs/5.5/collections#method-mapspread)
+- [``mapToDictionary``](https://laravel.com/docs/5.5/collections#method-maptodictonary)
 - [``mapToGroups``](https://laravel.com/docs/5.5/collections#method-maptogroups)
 - [``mapWithKeys``](https://laravel.com/docs/5.5/collections#method-mapwithkeys)
-- [``pad``](https://laravel.com/docs/5.5/collections#method-pad)
 - [``particion``](https://laravel.com/docs/5.5/collections#method-partition)
 - [``pipe``](https://laravel.com/docs/5.5/collections#method-pipe)
 - [``put``](https://laravel.com/docs/5.5/collections#method-put)
@@ -152,7 +153,7 @@ The ``clear`` method removes all the items from the collection:
 > This method is not implemented in Laravel's collection!
 
 ```js
-collect([1, 2, 3, 4, 5, 6]).clear() // []
+collect([1, 2, 3, 4, 5, 6]).clear(); // []
 ```
 
 #### ``clone()``
@@ -463,6 +464,12 @@ except.all();
         {role: 'Back-end dev', site: 'pineco.de'}
     ]
 */
+```
+
+#### ``pad()``
+
+```js
+
 ```
 
 #### ``pluck()``
