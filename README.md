@@ -107,6 +107,7 @@ If we use ``key``, it refers to objects, like ``{}``, if we use ``index``, it re
 - [``mapToDictionary``](https://laravel.com/docs/5.5/collections#method-maptodictonary)
 - [``mapToGroups``](https://laravel.com/docs/5.5/collections#method-maptogroups)
 - [``mapWithKeys``](https://laravel.com/docs/5.5/collections#method-mapwithkeys)
+- [``pad``](https://laravel.com/docs/5.5/collections#method-pad)
 - [``particion``](https://laravel.com/docs/5.5/collections#method-partition)
 - [``pipe``](https://laravel.com/docs/5.5/collections#method-pipe)
 - [``pad``](https://laravel.com/docs/5.5/collections#method-pad)
