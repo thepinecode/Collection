@@ -339,18 +339,6 @@ class Collection
     }
 
     /**
-     * Fill the collection by the given values.
-     */
-    pad(size, value)
-    {
-        if (this.count() < size) {
-            //
-        }
-
-        return new this.constructor(this.items);
-    }
-
-    /**
      * Pluck the values by the given keys.
      */
     pluck(key)

@@ -7,6 +7,13 @@ That means we implemented the methods to work well with objects-in-array structu
 
 ## Gettings Started
 
+You can download the repo and add it to your project. Then you can import the collection function.
+
+```js
+import { collection } from './Collection';
+window.collection = collection;
+```
+
 ## Methods
 Please note, not all the methods are implemented yet!
 Also, there are some minor changes compared to Laravel's collection.
@@ -46,7 +53,6 @@ If we use ``key``, it refers to objects, like ``{}``, if we use ``index``, it re
 - [``mode``](#mode)
 - [``nth``](#nth)
 - [``only``](#only)
-- [``pad``](#pad)
 - [``pluck``](#pluck)
 - [``pop``](#pop)
 - [``prepend``](#prepend)
@@ -103,6 +109,7 @@ If we use ``key``, it refers to objects, like ``{}``, if we use ``index``, it re
 - [``mapWithKeys``](https://laravel.com/docs/5.5/collections#method-mapwithkeys)
 - [``particion``](https://laravel.com/docs/5.5/collections#method-partition)
 - [``pipe``](https://laravel.com/docs/5.5/collections#method-pipe)
+- [``pad``](https://laravel.com/docs/5.5/collections#method-pad)
 - [``put``](https://laravel.com/docs/5.5/collections#method-put)
 - [``toArray``](https://laravel.com/docs/5.5/collections#method-toarray)
 - [``union``](https://laravel.com/docs/5.5/collections#method-union)
@@ -464,12 +471,6 @@ except.all();
         {role: 'Back-end dev', site: 'pineco.de'}
     ]
 */
-```
-
-#### ``pad()``
-
-```js
-
 ```
 
 #### ``pluck()``
