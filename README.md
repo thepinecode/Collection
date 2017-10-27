@@ -203,7 +203,7 @@ collect([1, 2, 3, 4]).count(); // 4
 ```
 
 #### ``diff()``
-The diff method compares the collection against another collection or an array based on its values.
+The ``diff`` method compares the collection against another collection or an array based on its values.
 This method will return the values in the original collection that are not present in the given collection:
 > This method does not modify the original collection.
 
@@ -219,9 +219,7 @@ If you would like to stop iterating through the items, you may return ``false`` 
 
 ```js
 collect([1, 2, 3, 4, 5, 6, 7, 8]).each((item, index) => {
-    if (item > 5) {
-        return false;
-    }
+    if (item > 5) return false;
 });
 ```
 
@@ -257,7 +255,8 @@ The ``filter`` method filters the collection using the given callback, keeping o
 >
 > This method does not modify the original collection.
 >
-> If you want to use inverse, use ``reject`` instead.
+> For the inverse of ``filter``, see the ``reject`` method.
+
 
 ```js
 let filtered = collect([1, 2, 3, 4, 5, 6, 7, 8]).filter((item, index) => item > 3);
@@ -292,7 +291,7 @@ items.all(); // [4, 5, 6, 7]
 ```
 
 #### ``get()``
-The ``get`` method returns the item at a given inde. If the index does not exist, ``null`` is returned.
+The ``get`` method returns the item at a given index. If the index does not exist, ``null`` is returned.
 You may optionally pass a default value as the second argument.
 You may even pass a callback as the default value.
 The result of the callback will be returned if the specified key does not exist:
@@ -349,7 +348,7 @@ collect([]).isNotEmpty(); // false
 The ``keys`` method returns all of the collection's indexes:
 
 ```js
-let keys = collect({name: 'Gergo', name: 'Adam'}).keys();
+let keys = collect([{name: 'Gergo'}, {name: 'Adam'}]).keys();
 
 keys.all(); // [0, 1]
 ```
@@ -357,12 +356,12 @@ keys.all(); // [0, 1]
 #### ``last()``
 The ``last`` method returns the last element in the collection that passes a given truth test.
 You may also call the last method with no arguments to get the last element in the collection:
-> If the collection is empty, null is returned.
+> If the collection is empty, ``null`` is returned.
 
 ```js
 collect([1, 2, 3, 4]).last((item, index) => item < 3); // 2
 
-collect([1, 2, 3, 4]).last() // 4
+collect([1, 2, 3, 4]).last(); // 4
 ```
 
 #### ``map()``
@@ -391,9 +390,9 @@ collect([{price: 200}, {price: 250}, {price: 300}]).max('price'); // 300
 The ``median`` method returns the median value of a given key:
 
 ```js
-collect([1,2,3,4,5,6]).median(); // 3.5
+collect([1, 2, 3, 4, 5, 6]).median(); // 3.5
 
-collect([1,2,3,4,5]).median(); // 3
+collect([1, 2, 3, 4, 5]).median(); // 3
 
 collect([{price: 1}, {price: 2}, {price: 3}]).median('price'); // 2
 
@@ -407,9 +406,11 @@ collect([
 #### ``merge()``
 The ``merge`` method merges the given array or collection with the original collection:
 > This method works differently than Laravel's.
+>
 > It's like basic array concatnation with unique values.
 >
 > Every duplicates will be removed in the new collection.
+>
 > You may use ``concat`` instead of ``merge`` to keep duplications after concatnation.
 
 ```js
@@ -452,7 +453,7 @@ collect([1, 2, 3, 4, 5, 6, 7, 8]).nth(2, 1); // [2, 4, 6, 8]
 
 #### ``only()``
 The ``only`` method returns the items in the collection with the specified keys:
-> This method works only with object '{}' items.
+> This method works only with object ``{}`` items.
 >
 > This method does not modify the original collection.
 >
@@ -476,9 +477,9 @@ except.all();
 
 #### ``pluck()``
 The ``pluck`` method retrieves all of the values for a given key:
-> You can pass nested keys as well.
->
 > This method works only with object '{}' items.
+>
+> You can pass nested keys as well.
 
 ```js
 collect([
@@ -557,7 +558,7 @@ collect([1, 2, 3, 4, 5, 6]).reduce((carry, item) => carry + item, 10); // 31
 #### ``reject()``
 The ``reject`` method filters the collection using the given callback.
 The callback should return ``true`` if the item should be removed from the resulting collection:
-> This method modifies the original collection!
+> This method does not modify the original collection!
 >
 > For the inverse of the ``reject`` method, see the ``filter`` method.
 
@@ -815,9 +816,9 @@ unique.all();
 
 #### ``where()``
 The ``where`` method filters the collection by a given key / value pair:
-> You can pass nested keys as well.
+> This method works only with object ``{}`` items.
 >
-> This method works only with object '{}' items.
+> You can pass nested keys as well.
 
 ```js
 let filtered = collect([
