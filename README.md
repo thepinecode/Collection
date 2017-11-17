@@ -477,7 +477,7 @@ except.all();
 
 #### ``pluck()``
 The ``pluck`` method retrieves all of the values for a given key:
-> This method works only with object '{}' items.
+> This method works only with object ``{}`` items.
 >
 > You can pass nested keys as well.
 
