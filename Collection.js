@@ -1,7 +1,10 @@
 class Collection
 {
     /**
-     * Create a new Collection instance.
+     * Initialize a new collection instance.
+     *
+     * @param  {array}  items
+     * @return {void}
      */
     constructor(items = [])
     {
@@ -10,6 +13,8 @@ class Collection
 
     /**
      * Get all of the items in the collection.
+     *
+     * @return {array}
      */
     all()
     {
@@ -17,7 +22,10 @@ class Collection
     }
 
     /**
-     * Alias for the avg method.
+     * Alias for the "avg" method.
+     *
+     * @param  {string}  key
+     * @return {number}
      */
     average(key)
     {
@@ -25,7 +33,10 @@ class Collection
     }
 
     /**
-     * Get all of the items in the collection.
+     * Get the average value of a given key.
+     *
+     * @param  {string}  key
+     * @return {number}
      */
     avg(key)
     {
@@ -33,7 +44,10 @@ class Collection
     }
 
     /**
-     * Split the collection to groups by the given size.
+     * Chunk the underlying collection array.
+     *
+     * @param  {number}  size
+     * @return {Collection}
      */
     chunk(size)
     {
@@ -50,6 +64,8 @@ class Collection
 
     /**
      * Clear the collection.
+     *
+     * @return {void}
      */
     clear()
     {
@@ -60,6 +76,8 @@ class Collection
 
     /**
      * Clone the collection.
+     *
+     * @return {Collection}
      */
     clone()
     {
@@ -67,7 +85,10 @@ class Collection
     }
 
     /**
-     * Concat the given values with the collection items.
+     * Push all of the given items onto the collection.
+     *
+     * @param  {array}  items
+     * @return {Collection}
      */
     concat(items)
     {
@@ -75,7 +96,11 @@ class Collection
     }
 
     /**
-     * Determines if the index / value pair exists.
+     * Determine if an item exists in the collection.
+     *
+     * @param  {number}  index
+     * @param  {mixed}  value
+     * @return {bool}
      */
     contains(index, value)
     {
@@ -92,6 +117,8 @@ class Collection
 
     /**
      * Count the number of items in the collection.
+     *
+     * @return {number}
      */
     count()
     {
@@ -99,7 +126,10 @@ class Collection
     }
 
     /**
-     * Search the difference between the given items and the collection items.
+     * Get the items in the collection that are not present in the given items.
+     *
+     * @param  {array}  items
+     * @return {Collection}
      */
     diff(items)
     {
@@ -107,7 +137,10 @@ class Collection
     }
 
     /**
-     * Iterate over the collection items.
+     * Execute a callback over each item.
+     *
+     * @param  {function}  callback
+     * @return {void}
      */
     each(callback)
     {
@@ -117,7 +150,10 @@ class Collection
     }
 
     /**
-     * Determine if every item pass a given truth test.
+     * Determine if all items in the collection pass the given test.
+     *
+     * @param  {function}  callback
+     * @return {bool}
      */
     every(callback)
     {
@@ -125,21 +161,29 @@ class Collection
     }
 
     /**
-     * Remove the given keys from the items.
+     * Get all items except for those with the specified keys.
+     *
+     * @param  {string|array}  keys
+     * @return {Collection}
      */
     except(keys)
     {
         keys = Array.isArray(keys) ? keys : [keys];
 
         return this.map(item => {
-            keys.forEach(key => { if (item.hasOwnProperty(key)) delete item[key] });
+            keys.forEach(key => {
+                if (item.hasOwnProperty(key)) delete item[key]
+            });
 
             return item;
         });
     }
 
     /**
-     * Fill the collection.
+     * Fill the collection with the goven items.
+     *
+     * @param  {array}  items
+     * @return {this}
      */
     fill(items)
     {
@@ -149,7 +193,10 @@ class Collection
     }
 
     /**
-     * Filter trough the collection items.
+     * Run a filter over each of the items.
+     *
+     * @param  {function}  callback
+     * @return {Collection}
      */
     filter(callback)
     {
@@ -159,7 +206,10 @@ class Collection
     }
 
     /**
-     * Get the first item from the collection.
+     * Get the first item from the collection passing the given truth test.
+     *
+     * @param  {function}  callback
+     * @return {mixed}
      */
     first(callback)
     {
@@ -169,7 +219,10 @@ class Collection
     }
 
     /**
-     * Remove items from the collection by keys.
+     * Remove an item from the collection by key.
+     *
+     * @param  {string|array}  index
+     * @return {this}
      */
     forget(index)
     {
@@ -182,6 +235,10 @@ class Collection
 
     /**
      * Get an item from the collection by key.
+     *
+     * @param  {number}  index
+     * @param  {mixed}  value
+     * @return {mixed}
      */
     get(index, value)
     {
@@ -191,7 +248,10 @@ class Collection
     }
 
     /**
-     * Determine if the collection has item by the given key.
+     * Determine if an item exists in the collection by key.
+     *
+     * @param  {number}  key
+     * @return {bool}
      */
     has(index)
     {
@@ -199,7 +259,11 @@ class Collection
     }
 
     /**
-     * Implode the collection by the given glue.
+     * Concatenate values of a given key as a string.
+     *
+     * @param  {string}  key
+     * @param  {string}  glue
+     * @return {string}
      */
     implode(key, glue = null)
     {
@@ -209,7 +273,9 @@ class Collection
     }
 
     /**
-     * Determine if the collection is empty.
+     * Determine if the collection is empty or not.
+     *
+     * @return {bool}
      */
     isEmpty()
     {
@@ -218,6 +284,8 @@ class Collection
 
     /**
      * Determine if the collection is not empty.
+     *
+     * @return {bool}
      */
     isNotEmpty()
     {
@@ -225,15 +293,20 @@ class Collection
     }
 
     /**
-     * Get the keys of the collection.
+     * Get the keys of the collection items.
+     *
+     * @return {Colection}
      */
     keys()
     {
-        return Object.keys(this.items);
+        return new this.constructor(Object.keys(this.items));
     }
 
     /**
-     * Get the last element in the collection.
+     * Get the last item from the collection.
+     *
+     * @param  {function}  callback
+     * @return {mixed}
      */
     last(callback)
     {
@@ -243,7 +316,10 @@ class Collection
     }
 
     /**
-     * Map trought the items.
+     * Run a map over each of the items.
+     *
+     * @param  {function}  callback
+     * @return {Collection}
      */
     map(callback)
     {
@@ -251,7 +327,10 @@ class Collection
     }
 
     /**
-     * Get the max value by the given key.
+     * Get the max value of a given key.
+     *
+     * @param  {string|null}  key
+     * @return {mixed}
      */
     max(key)
     {
@@ -261,27 +340,33 @@ class Collection
     }
 
     /**
-     * Get the median value of the given key.
+     * Get the median of a given key.
+     *
+     * @param  {string|array}  key
+     * @return {mixed}
      */
     median(key)
     {
         key ? this.sortBy(key) : this.sort();
 
-        let middle = Math.floor(this.count() / 2);
-        let item = this.items[middle];
+        let middle = Math.floor(this.count() / 2),
+            item = this.items[middle];
 
         if (this.count() % 2) {
             return key ? this._extract(key, item) : item;
-        } else {
-            return (key
-                    ? (this._extract(key, this.items[middle - 1]) + this._extract(key, item))
-                    : (this.items[middle - 1] + item)
-            ) / 2.0;
         }
+
+        return (key
+            ? (this._extract(key, this.items[middle - 1]) + this._extract(key, item))
+            : (this.items[middle - 1] + item)
+        ) / 2.0;
     }
 
     /**
-     * Merge the items to the collection.
+     * Merge the collection with the given items.
+     *
+     * @param  {array}  items
+     * @return {Collection}
      */
     merge(items)
     {
@@ -289,7 +374,7 @@ class Collection
     }
 
     /**
-     * Get the min value by the given key.
+     * Get the min value of a given key.
      */
     min(key)
     {
@@ -299,15 +384,16 @@ class Collection
     }
 
     /**
-     * Get the mode value by the given key.
+     * Get the mode of a given key.
      *
-     * https://stackoverflow.com/questions/40410470/highest-occurrence-in-an-array-or-first-selected/40410898#40410898
+     * @param  {string}  key
+     * @return {mixed}
      */
     mode(key)
     {
         let map = this.items.map(
-            (a) => this.items.filter(
-                (b) => key ? (this._extract(key, a) === this._extract(key, b)) : (a === b)
+            a => this.items.filter(
+                b => key ? (this._extract(key, a) === this._extract(key, b)) : (a === b)
             ).length
         );
 
@@ -317,7 +403,11 @@ class Collection
     }
 
     /**
-     * Get the nt-h element in the collection.
+     * Create a new collection consisting of every n-th element.
+     *
+     * @param  {number}  n
+     * @param  {number}  offset
+     * @return {Collection}
      */
     nth(n, offset = 0)
     {
@@ -325,7 +415,10 @@ class Collection
     }
 
     /**
-     * Leave only the given keys in the collection items.
+     * Get the items with the specified keys.
+     *
+     * @param  {string|array}  keys
+     * @return {Collection}
      */
     only(keys)
     {
@@ -339,7 +432,10 @@ class Collection
     }
 
     /**
-     * Pluck the values by the given keys.
+     * Get the values of a given key.
+     *
+     * @param  {string}  key
+     * @return {Collection}
      */
     pluck(key)
     {
@@ -348,6 +444,8 @@ class Collection
 
     /**
      * Get and remove the last item from the collection.
+     *
+     * @return {mixed}
      */
     pop()
     {
@@ -356,6 +454,9 @@ class Collection
 
     /**
      * Push an item onto the beginning of the collection.
+     *
+     * @param  {mixed}  item
+     * @return {this}
      */
     prepend(item)
     {
@@ -366,6 +467,9 @@ class Collection
 
     /**
      * Get and remove an item from the collection.
+     *
+     * @param  {number}  index
+     * @return {mixed}
      */
     pull(index)
     {
@@ -374,6 +478,9 @@ class Collection
 
     /**
      * Push an item onto the end of the collection.
+     *
+     * @param  {mixed}  item
+     * @return {this}
      */
     push(item)
     {
@@ -383,7 +490,9 @@ class Collection
     }
 
     /**
-     * Get a random item from the collection.
+     * Get one or a specified number of items randomly from the collection.
+     *
+     * @return {mixed}
      */
     random()
     {
@@ -391,7 +500,11 @@ class Collection
     }
 
     /**
-     * Reduce the values to a single value.
+     * Reduce the collection to a single value.
+     *
+     * @param  {function}  callback
+     * @param  {mixed}  initial
+     * @return {mixed}
      */
     reduce(callback, initial = null)
     {
@@ -399,7 +512,10 @@ class Collection
     }
 
     /**
-     * Reject the items what does not pass the truth test.
+     * Create a collection of all elements that do not pass a given truth test.
+     *
+     * @param  {function}  callback
+     * @return {Collection}
      */
     reject(callback)
     {
@@ -410,16 +526,21 @@ class Collection
 
     /**
      * Reverse items order.
+     *
+     * @return {Collection}
      */
     reverse()
     {
-        this.items.reverse();
+        let items = this.items;
 
-        return this;
+        return new this.constructor(items.reverse());
     }
 
     /**
      * Search the collection for a given value and return the corresponding key if successful.
+     *
+     * @param  {function|number}  item
+     * @return {mixed}
      */
     search(item)
     {
@@ -436,6 +557,8 @@ class Collection
 
     /**
      * Get and remove the first item from the collection.
+     *
+     * @return {mixed}
      */
     shift()
     {
@@ -443,7 +566,9 @@ class Collection
     }
 
     /**
-     * Shuffle the collection in a random order.
+     * Shuffle the items in the collection.
+     *
+     * @return {Collection}
      */
     shuffle()
     {
@@ -458,7 +583,11 @@ class Collection
     }
 
     /**
-     * Slice the collection by the given index and size.
+     * Slice the underlying collection array.
+     *
+     * @param  {number}  index
+     * @param  {number}  size
+     * @return {Collection}
      */
     slice(index, size)
     {
@@ -468,17 +597,25 @@ class Collection
     }
 
     /**
-     * Sort the collection.
+     * Sort through each item with a callback.
+     *
+     * @param  {function}  callback
+     * @return {Collection}
      */
     sort(callback)
     {
-        this.items.sort((a, b) => callback ? callback(a, b) : a - b);
+        let items = this.items;
 
-        return this;
+        items.sort((a, b) => callback ? callback(a, b) : a - b);
+
+        return new this.constructor(items);
     }
 
     /**
-     * Sort the collection in desc order.
+     * Sort through each item with a callback in descending order.
+     *
+     * @param  {function}  callback
+     * @return {Collection}
      */
     sortDesc(callback)
     {
@@ -486,7 +623,10 @@ class Collection
     }
 
     /**
-     * Sort the collection by the given key.
+     * Sort the collection using the given callback.
+     *
+     * @param  {string}  key
+     * @return {Collection}
      */
     sortBy(key)
     {
@@ -494,7 +634,10 @@ class Collection
     }
 
     /**
-     * Sort the collection by the given key in desc order.
+     * Sort the collection using the given callback in descending order.
+     *
+     * @param  {string}  key
+     * @return {Collection}
      */
     sortByDesc(key)
     {
@@ -502,7 +645,12 @@ class Collection
     }
 
     /**
-     * Splice the collection by the index and the count and add exrta items to it.
+     * Splice a portion of the underlying collection array.
+     *
+     * @param  {number}  index
+     * @param  {number}  count
+     * @param  {array}  items
+     * @return {Collection}
      */
     splice(index, count, items = [])
     {
@@ -510,7 +658,10 @@ class Collection
     }
 
     /**
-     * Split the collection to the given amount of groups.
+     * Split a collection into a certain number of groups.
+     *
+     * @param  {number}  groups
+     * @return {Collection}
      */
     split(groups)
     {
@@ -528,7 +679,10 @@ class Collection
     }
 
     /**
-     * Sum the values of the items or the callback.
+     * Get the sum of the given values.
+     *
+     * @param  {function|string|null}  key
+     * @return {number}
      */
     sum(key)
     {
@@ -538,7 +692,10 @@ class Collection
     }
 
     /**
-     * Take the given amout of items from the collection.
+     * Take the first or last number of items.
+     *
+     * @param  {number}  limit
+     * @return {Collection}
      */
     take(limit)
     {
@@ -548,7 +705,10 @@ class Collection
     }
 
     /**
-     * Tap the collection.
+     * Pass the collection to the given callback and then return it.
+     *
+     * @param  {function}  callback
+     * @return {this}
      */
     tap(callback)
     {
@@ -558,7 +718,11 @@ class Collection
     }
 
     /**
-     * Static way to create collections.
+     * Create a new collection by invoking the callback a given amount of times.
+     *
+     * @param  {number}  number
+     * @param  {function}  callback
+     * @return {this}
      */
     times(number, callback)
     {
@@ -573,20 +737,21 @@ class Collection
 
     /**
      * Toggle an item in the collection.
+     *
+     * @param  {mixed}  item
+     * @return {this}
      */
     toggle(item)
     {
-        if (this.contains(item)) {
-            this.forget(this.search(item));
-        } else {
-            this.push(item);
-        }
+        this.contains(item) ? this.forget(this.search(item)) : this.push(item);
 
         return this;
     }
 
     /**
-     * Convert the collection to JSON.
+     * Get the collection of items as JSON.
+     *
+     * @return {string}
      */
     toJson()
     {
@@ -594,7 +759,10 @@ class Collection
     }
 
     /**
-     * Transforms the collection by the given callback.
+     * Transform each item in the collection using a callback.
+     *
+     * @param  {function}  callback
+     * @return {this}
      */
     transform(callback)
     {
@@ -604,7 +772,10 @@ class Collection
     }
 
     /**
-     * Filter only unique items in the collection.
+     * Return only unique items from the collection array.
+     *
+     * @param  {string}  key
+     * @return {Collection}
      */
     unique(key)
     {
@@ -627,7 +798,11 @@ class Collection
     }
 
     /**
-     * Return a new collection with the items what pass the condition.
+     * Filter items by the given key value pair.
+     *
+     * @param  {string}  key
+     * @param  {mixed}  value
+     * @return {Collection}
      */
     where(key, value)
     {
@@ -635,7 +810,11 @@ class Collection
     }
 
     /**
-     * Return a new collection with the items what pass the condition.
+     * Filter items by the given key value pair.
+     *
+     * @param  {string}  key
+     * @param  {array}  values
+     * @return {Collection}
      */
     whereIn(key, values)
     {
@@ -643,7 +822,11 @@ class Collection
     }
 
     /**
-     * Return a new collection with the items what do not pass the condition.
+     * Filter items by the given key value pair.
+     *
+     * @param  {string}  key
+     * @param  {array}  values
+     * @return {Collection}
      */
     whereNotIn(key, values)
     {
@@ -651,7 +834,12 @@ class Collection
     }
 
     /**
-     * The extract helper.
+     * Extract the value from the object by its key.
+     *
+     * @param  {string}  key
+     * @param  {object}  item
+     * @param  {mixed}  value
+     * @return {mixed}
      */
     _extract(key, item, value = null)
     {
@@ -659,6 +847,6 @@ class Collection
     }
 }
 
+// Exports
 const collect = (items = []) => new Collection(items);
-
 export { Collection as default, collect };
