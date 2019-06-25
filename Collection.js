@@ -3,12 +3,12 @@ class Collection
     /**
      * Initialize a new collection instance.
      *
-     * @param  {array}  items
+     * @param  {mixed}  items
      * @return {void}
      */
     constructor(items = [])
     {
-        this.items = items;
+        this.items = Array.isArray(items) ? items : [items];
     }
 
     /**
@@ -60,6 +60,33 @@ class Collection
         }
 
         return new this.constructor(sets);
+    }
+
+    /**
+     * Collapse the collection of items into a single array.
+     *
+     * @return {Collection}
+     */
+    collapse()
+    {
+        return new this.constructor(this.items.flat(Infinity));
+    }
+
+    /**
+     * Create a collection by using this collection for keys and another for its values.
+     *
+     * @param  {mixed}  values
+     * @return {object}
+     */
+    combine(values)
+    {
+        values = Array.isArray(values) ? values : [values];
+
+        return this.items.reduce((value, item, index) => {
+            value[item] = values[index];
+
+            return value;
+        }, {});
     }
 
     /**
@@ -123,6 +150,18 @@ class Collection
     count()
     {
         return this.items.length;
+    }
+
+    /**
+     * Dump the collection and end the script.
+     *
+     * @return {this}
+     */
+    dd()
+    {
+        console.table(this.items);
+
+        return this;
     }
 
     /**
@@ -849,4 +888,4 @@ class Collection
 
 // Exports
 const collect = (items = []) => new Collection(items);
-export { Collection as default, collect };
+// export { Collection as default, collect };
