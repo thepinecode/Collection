@@ -153,6 +153,40 @@ class Collection
     }
 
     /**
+     * Count the number of items in the collection using a given truth test.
+     *
+     * @param  {function|string}  callback
+     * @return {object}
+     */
+    countBy(callback)
+    {
+        if (! callback) callback = value => value;
+
+        let groups = this.groupBy(callback);
+
+        for (let i in groups) {
+            groups[i] = groups[i].count();
+        }
+
+        return groups;
+    }
+
+    /**
+     * Cross join with the given lists, returning all possible permutations.
+     *
+     * @param  {mixed}  arguments
+     * @return {Collection}
+     */
+    crossJoin()
+    {
+        let lists = [this.items].concat([...arguments]);
+
+        lists = lists.reduce((a, b) => a.reduce((r, v) => r.concat(b.map(w => [].concat(v, w))), []));
+
+        return new this.constructor(lists);
+    }
+
+    /**
      * Dump the collection and end the script.
      *
      * @return {this}
@@ -173,6 +207,16 @@ class Collection
     diff(items)
     {
         return new this.constructor(this.items.filter((item, index) => items.indexOf(item) < 0));
+    }
+
+    /**
+     * Dump the collection.
+     *
+     * @return {this}
+     */
+    dump()
+    {
+        return this.dd();
     }
 
     /**
@@ -284,6 +328,26 @@ class Collection
         if (typeof value === 'function') value = value();
 
         return this._extract(index, this.items, value)
+    }
+
+    /**
+     * Group an associative array by a field or using a callback.
+     *
+     * @param  {function|string}  grouper
+     * @return {Collection}
+     */
+    groupBy(callback)
+    {
+        return this.items.reduce((value, item) => {
+            if (typeof callback === 'function') {
+                let grouper = callback(item);
+                (value[grouper] = value[grouper] || new this.constructor).push(item);
+            } else {
+                (value[item[callback]] = value[item[callback]] || new this.constructor).push(item);
+            }
+
+            return value;
+        }, {});
     }
 
     /**
